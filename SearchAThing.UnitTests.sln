@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Net", "..\Sear
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Graph", "..\SearchAThing.Graph\SearchAThing.Graph\SearchAThing.Graph.csproj", "{D818C09A-9E98-46B4-98C7-81836B7F9585}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Sci", "..\SearchAThing.Sci\src\SearchAThing.Sci\SearchAThing.Sci.csproj", "{F9D7F0EE-D4FF-4455-87BE-08539D2D1982}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D818C09A-9E98-46B4-98C7-81836B7F9585}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D818C09A-9E98-46B4-98C7-81836B7F9585}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D818C09A-9E98-46B4-98C7-81836B7F9585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D7F0EE-D4FF-4455-87BE-08539D2D1982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D7F0EE-D4FF-4455-87BE-08539D2D1982}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D7F0EE-D4FF-4455-87BE-08539D2D1982}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D7F0EE-D4FF-4455-87BE-08539D2D1982}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

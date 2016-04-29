@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections.cs" />
+    <Compile Include="Sci.cs" />
     <Compile Include="Net.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="Core.cs" />
@@ -84,6 +85,10 @@
     <ProjectReference Include="..\..\SearchAThing.Net\SearchAThing.Net\SearchAThing.Net.csproj">
       <Project>{81cf49db-bd2e-4c72-8016-9268234a2c88}</Project>
       <Name>SearchAThing.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SearchAThing.Sci\src\SearchAThing.Sci\SearchAThing.Sci.csproj">
+      <Project>{f9d7f0ee-d4ff-4455-87be-08539d2d1982}</Project>
+      <Name>SearchAThing.Sci</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
