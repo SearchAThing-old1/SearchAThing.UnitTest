@@ -70,23 +70,23 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SearchAThing.Collections\SearchAThing.Collections\SearchAThing.Collections.csproj">
+    <ProjectReference Include="..\..\SearchAThing.Collections\src\SearchAThing.Collections.csproj">
       <Project>{5b7d3f82-9b6f-476f-873f-92a36b96e8ed}</Project>
       <Name>SearchAThing.Collections</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SearchAThing.Core\SearchAThing.Core\SearchAThing.Core.csproj">
+    <ProjectReference Include="..\..\SearchAThing.Core\src\SearchAThing.Core.csproj">
       <Project>{8162a30e-a46d-4a78-ba12-1f376ac6f1b4}</Project>
       <Name>SearchAThing.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SearchAThing.Graph\SearchAThing.Graph\SearchAThing.Graph.csproj">
+    <ProjectReference Include="..\..\SearchAThing.Graph\src\SearchAThing.Graph.csproj">
       <Project>{d818c09a-9e98-46b4-98c7-81836b7f9585}</Project>
       <Name>SearchAThing.Graph</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SearchAThing.Net\SearchAThing.Net\SearchAThing.Net.csproj">
+    <ProjectReference Include="..\..\SearchAThing.Net\src\SearchAThing.Net.csproj">
       <Project>{81cf49db-bd2e-4c72-8016-9268234a2c88}</Project>
       <Name>SearchAThing.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SearchAThing.Sci\src\SearchAThing.Sci\SearchAThing.Sci.csproj">
+    <ProjectReference Include="..\..\SearchAThing.Sci\src\SearchAThing.Sci.csproj">
       <Project>{f9d7f0ee-d4ff-4455-87be-08539d2d1982}</Project>
       <Name>SearchAThing.Sci</Name>
     </ProjectReference>
