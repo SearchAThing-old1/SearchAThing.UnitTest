@@ -93,6 +93,44 @@ namespace SearchAThing.UnitTests
                     new Vector3D(443.6913, 107.8843, 0), new Vector3D(342.7154, 239.6307, 0), model)
                 .EqualsTolLen(new Vector3D(7.3989, 171.5134, 300), model));
 
+            // vector parallel (1-d)
+            Assert.True(new Vector3D(1, 0, 0).IsParallelTo(new Vector3D(-1, 0, 0), model));
+            Assert.True(new Vector3D(0, 1, 0).IsParallelTo(new Vector3D(0, -2, 0), model));
+            Assert.True(new Vector3D(0, 0, 1).IsParallelTo(new Vector3D(0, 0, -3), model));
+
+            // vector parallel (2-d)
+            Assert.True(new Vector3D(1, 1, 0).IsParallelTo(new Vector3D(-2, -2, 0), model));
+            Assert.False(new Vector3D(1, 1, 0).IsParallelTo(new Vector3D(-2, 2, 0), model));
+
+            Assert.True(new Vector3D(1, 0, 1).IsParallelTo(new Vector3D(-2, 0, -2), model));
+            Assert.False(new Vector3D(1, 0, 1).IsParallelTo(new Vector3D(-2, 0, 2), model));
+
+            Assert.True(new Vector3D(0, 1, 1).IsParallelTo(new Vector3D(0, -2, -2), model));
+            Assert.False(new Vector3D(0, 1, 1).IsParallelTo(new Vector3D(0, -2, 2), model));
+
+            // vector parallel (3-d)
+            Assert.True(new Vector3D(1, 1, 1).IsParallelTo(new Vector3D(-2, -2, -2), model));
+            Assert.True(new Vector3D(253.6625, 162.6347, 150).IsParallelTo(new Vector3D(380.4937, 243.952, 225), model));
+
+            // vector parallel ( tolerance checks )
+            {
+                // ensure mm tolerance 1e-1
+                var tmpModel = new SampleModel();
+
+                tmpModel.MUDomain.SetLength(new Measure(1e-1, MUCollection.Length.mm));
+
+                // Z component of first vector will be considered zero cause < 1e-1 model tolerance     
+                Assert.True(new Vector3D(10, 0, 0.05).IsParallelTo(new Vector3D(-2, 0, 0), tmpModel));
+
+                // Z component of first vector will be considered not-zero cause > 1e-1 model tolerance
+                Assert.False(new Vector3D(10, 0, 0.11).IsParallelTo(new Vector3D(-2, 0, 0), tmpModel));
+
+                // X, Z components of first vector force internal usage of normalized tolerance 1e-4
+                // cause the length of the shortest vector here is < 1.5 and may represents a normalized vector
+                // or a result of such type of operation
+                Assert.True(new Vector3D(0.09, 0, 0.09).IsParallelTo(new Vector3D(-20, 0, -20), tmpModel));
+            }
+
         }
 
     }
