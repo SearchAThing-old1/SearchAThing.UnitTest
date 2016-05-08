@@ -65,6 +65,10 @@ namespace SearchAThing.UnitTests
             // vector projection
             Assert.True(new Vector3D(101.546, 25.186, 1.3).Project(new Vector3D(48.362, 46.564, 5))
                 .EqualsTolLen(new Vector3D(56.491, 14.011, 0.723), model));
+
+            // vector vers
+            Assert.True(new Vector3D(101.546, 25.186, 1.3).Concordant(new Vector3D(50.773, 12.593, .65)));
+            Assert.False(new Vector3D(101.546, 25.186, 1.3).Concordant(new Vector3D(-50.773, -12.593, .65)));
         }
 
     }
