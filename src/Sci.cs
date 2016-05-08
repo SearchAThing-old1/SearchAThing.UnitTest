@@ -69,6 +69,16 @@ namespace SearchAThing.UnitTests
             // vector vers
             Assert.True(new Vector3D(101.546, 25.186, 1.3).Concordant(new Vector3D(50.773, 12.593, .65)));
             Assert.False(new Vector3D(101.546, 25.186, 1.3).Concordant(new Vector3D(-50.773, -12.593, .65)));
+
+            // angle toward
+            Assert.True(new Vector3D(120.317, 42.914, 0).AngleToward(new Vector3D(28.549, 63.771, 0), Vector3D.ZAxis, model)
+                .EqualsTol(0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
+
+            Assert.False(new Vector3D(120.317, 42.914, 0).AngleToward(new Vector3D(28.549, 63.771, 0), -Vector3D.ZAxis, model)
+                .EqualsTol(0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
+
+            Assert.True(new Vector3D(120.317, 42.914, 0).AngleToward(new Vector3D(28.549, 63.771, 0), -Vector3D.ZAxis, model)
+                .EqualsTol(2 * PI - 0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
         }
 
     }
