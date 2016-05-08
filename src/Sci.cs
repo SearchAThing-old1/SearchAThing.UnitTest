@@ -61,6 +61,10 @@ namespace SearchAThing.UnitTests
             // angle rad
             Assert.True(new Vector3D(3.48412, 2.06577, 0).AngleRad(new Vector3D(-3.48412, -2.066, 0), model)
                 .EqualsTol(PI, MUCollection.PlaneAngle.rad.Tolerance(model)));
+
+            // vector projection
+            Assert.True(new Vector3D(101.546, 25.186, 1.3).Project(new Vector3D(48.362, 46.564, 5))
+                .EqualsTolLen(new Vector3D(56.491, 14.011, 0.723), model));
         }
 
     }
