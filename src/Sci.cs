@@ -81,10 +81,10 @@ namespace SearchAThing.UnitTests
                 .EqualsTol(2 * PI - 0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
 
             // z-axis rotation
-            Assert.True(new Vector3D(109.452, 38.712, 0).RotateAboutZAxis(50.0).EqualsTolLen(new Vector3D(40.699, 108.728, 0), model));
+            Assert.True(new Vector3D(109.452, 38.712, 0).RotateAboutZAxis((50.0).ToRad()).EqualsTolLen(new Vector3D(40.699, 108.728, 0), model));
 
             // arbitrary axis rotation
-            Assert.True(new Vector3D(747.5675, 259.8335, 0).RotateAboutAxis(new Vector3D(123.151, 353.8977, 25.6), 50.0)
+            Assert.True(new Vector3D(747.5675, 259.8335, 0).RotateAboutAxis(new Vector3D(123.151, 353.8977, 25.6), (50.0).ToRad())
                 .EqualsTolLen(new Vector3D(524.3462, 370.9603, -462.4069), model));
 
             // rotate relative
