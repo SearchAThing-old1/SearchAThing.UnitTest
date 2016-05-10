@@ -65,7 +65,7 @@ namespace SearchAThing.UnitTests
 
             // vector projection
             Assert.True(new Vector3D(101.546, 25.186, 1.3).Project(new Vector3D(48.362, 46.564, 5))
-                .EqualsTol(tolLen, new Vector3D(56.491, 14.011, 0.723)));
+                .EqualsTol(tolLen, new Vector3D(64.9889,62.5728,6.719)));
 
             // vector vers
             Assert.True(new Vector3D(101.546, 25.186, 1.3).Concordant(tolLen, new Vector3D(50.773, 12.593, .65)));
@@ -175,6 +175,13 @@ namespace SearchAThing.UnitTests
 
                     Assert.True(l1.Intersect(tolLen, l2).EqualsTol(tolLen, 0.0675, 0.0833, -0.062));
                 }
+            }
+
+            // project point on a line
+            {
+                var p = new Vector3D(1, 1, 0);
+                var perpLine = Line3D.XAxisLine.Perpendicular(tolLen, p);
+                Assert.True(perpLine.From.EqualsTol(tolLen, p) && perpLine.To.EqualsTol(tolLen, 1, 0, 0));
             }
 
         }
