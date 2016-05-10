@@ -184,6 +184,12 @@ namespace SearchAThing.UnitTests
                 Assert.True(perpLine.From.EqualsTol(tolLen, p) && perpLine.To.EqualsTol(tolLen, 1, 0, 0));
             }
 
+            // nr and vector stringification
+            {                
+                Assert.True((0.5049).Stringify(3) == (0.5051).Stringify(3));
+                Assert.True(new Vector3D(0.5049, 1, 2).Stringify(3) == "0.505_1_2");
+            }
+
         }
 
     }
