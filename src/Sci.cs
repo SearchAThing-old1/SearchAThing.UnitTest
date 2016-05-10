@@ -133,6 +133,50 @@ namespace SearchAThing.UnitTests
                 Assert.True(new Vector3D(0.09, 0, 0.09).IsParallelTo(tmpTolLen, new Vector3D(-20, 0, -20)));
             }
 
+            // line contains point
+            {
+                // line (0,0,0)-(1,0,0)
+                var l = new Line3D(Vector3D.Zero, new Vector3D(1, 0, 0), Line3DConstructMode.PointAndVector);
+                Assert.True(l.LineContainsPoint(tolLen, 2, 0, 0));
+                Assert.False(l.LineContainsPoint(tolLen, 2, 1, 0));
+                Assert.False(l.LineContainsPoint(tolLen, 2, 0, 1));
+
+                Assert.True(l.SegmentContainsPoint(tolLen, 1, 0, 0));
+                Assert.True(l.SegmentContainsPoint(tolLen, 0, 0, 0));
+                Assert.False(l.SegmentContainsPoint(tolLen, -.1, 0, 0));
+            }
+
+            // line 3d intersection
+            {
+                {
+                    var l1 = new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 0, 0));
+                    var l2 = new Line3D(new Vector3D(2, 0, 0), new Vector3D(2, 0, 2));
+
+                    Assert.True(l1.Intersect(tolLen, l2).EqualsTol(tolLen, 2, 0, 0));
+                }
+
+                {
+                    var l1 = new Line3D(new Vector3D(0, 0, 0), new Vector3D(0, 1, 0));
+                    var l2 = new Line3D(new Vector3D(0, 2, 0), new Vector3D(2, 2, 0));
+
+                    Assert.True(l1.Intersect(tolLen, l2).EqualsTol(tolLen, 0, 2, 0));
+                }
+
+                {
+                    var l1 = new Line3D(new Vector3D(0, 0, 0), new Vector3D(0, 0, 1));
+                    var l2 = new Line3D(new Vector3D(0, 0, 2), new Vector3D(2, 0, 2));
+
+                    Assert.True(l1.Intersect(tolLen, l2).EqualsTol(tolLen, 0, 0, 2));
+                }
+
+                {
+                    var l1 = new Line3D(new Vector3D(0, 0, 0), new Vector3D(1.6206, 2, -1.4882));
+                    var l2 = new Line3D(new Vector3D(1.2, .7, 2), new Vector3D(.6338, .3917, .969));
+
+                    Assert.True(l1.Intersect(tolLen, l2).EqualsTol(tolLen, 0.0675, 0.0833, -0.062));
+                }
+            }
+
         }
 
     }
