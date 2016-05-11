@@ -26,6 +26,7 @@
 using SearchAThing.Core;
 using SearchAThing.Sci;
 using System;
+using System.Collections.Generic;
 using Xunit;
 using static System.Math;
 
@@ -184,6 +185,15 @@ namespace SearchAThing.UnitTests
                 Assert.True(perpLine.From.EqualsTol(tolLen, p) && perpLine.To.EqualsTol(tolLen, 1, 0, 0));
             }
 
+            // check two lines are colinear
+            {
+                Assert.True(new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1))
+                    .Colinear(tolLen, new Line3D(new Vector3D(2, 2, 2), new Vector3D(3, 3, 3))));
+
+                Assert.False(new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1))
+                    .Colinear(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1.11))));
+            }
+
             // nr and vector stringification
             {
                 Assert.True((0.5049).Stringify(3) == (0.5051).Stringify(3));
@@ -218,13 +228,35 @@ namespace SearchAThing.UnitTests
 
                 var o = new Vector3D(15.3106, 22.97, 0);
                 var v1 = new Vector3D(10.3859, 3.3294, 30);
-                var v2 = new Vector3D(2.3515,14.101,0);
+                var v2 = new Vector3D(2.3515, 14.101, 0);
 
                 var cs = new CoordinateSystem(o, v1, v2);
 
                 var u = p.ToUCS(cs);
                 Assert.True(u.EqualsTol(1e-4, 32.3623, 12.6875, -27.3984));
                 Assert.True(u.ToWCS(cs).EqualsTol(1e-4, p));
+            }
+
+            // polygon
+            {
+                var B = 700; var b = 50;
+                var H = 900; var h = 50;
+
+                var pts = new List<Vector3D>()
+                {
+                    new Vector3D(0, 0, 0), new Vector3D(B, 0, 0),
+                    new Vector3D(B, h, 0),new Vector3D(b, h, 0),
+                    new Vector3D(b, H+h, 0), new Vector3D(B, H+h, 0),
+                    new Vector3D(B, H +2*h, 0), new Vector3D(0, H+2*h, 0)
+                };
+
+                // area
+                var area = pts.Area(tolLen);
+                Assert.True(area.EqualsTol(tolLen, 2 * B * h + H * b));
+
+                // centroid
+                Assert.True(pts.Centroid(tolLen, area).EqualsTol(tolLen, (2 * h * B * B / 2 + b * b * H / 2) / area, H / 2 + h, 0));
+
             }
 
         }
