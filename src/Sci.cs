@@ -65,7 +65,7 @@ namespace SearchAThing.UnitTests
 
             // vector projection
             Assert.True(new Vector3D(101.546, 25.186, 1.3).Project(new Vector3D(48.362, 46.564, 5))
-                .EqualsTol(tolLen, new Vector3D(64.9889,62.5728,6.719)));
+                .EqualsTol(tolLen, new Vector3D(64.9889, 62.5728, 6.719)));
 
             // vector vers
             Assert.True(new Vector3D(101.546, 25.186, 1.3).Concordant(tolLen, new Vector3D(50.773, 12.593, .65)));
@@ -185,9 +185,32 @@ namespace SearchAThing.UnitTests
             }
 
             // nr and vector stringification
-            {                
+            {
                 Assert.True((0.5049).Stringify(3) == (0.5051).Stringify(3));
                 Assert.True(new Vector3D(0.5049, 1, 2).Stringify(3) == "0.505_1_2");
+            }
+
+            // matrix
+            {
+                var m = new Matrix3D(new double[] {
+                    1, .5, 6,
+                    .1, 2, .05,
+                    .7, 11, .55
+                });
+
+                // det
+                Assert.True(m.Determinant().EqualsTol(1e-6, -1.260));
+
+                // inv
+                Assert.True(m.Inverse().EqualsTol(1e-3, new Matrix3D(new double[] {
+                    -0.437, -52.163, 9.504,
+                    0.016, 2.897, -0.437,
+                    0.238, 8.452, -1.548
+                })));
+
+                // solve
+                Assert.True(m.Solve(1.1, 2.2, 3.3).EqualsTol(1e-3, new Vector3D(-83.875, 4.95, 13.75)));
+
             }
 
         }
