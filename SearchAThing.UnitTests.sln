@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Sci", "..\Sear
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.UnitTests", "src\SearchAThing.UnitTests.csproj", "{0FEE5A0E-3DD1-48CE-B20A-08FFF2B6DC60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvexHull", "..\ConvexHull\ConvexHull\ConvexHull.csproj", "{DC956E5C-5FAB-481E-BA9F-3BEB4E7E6B20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,12 @@ Global
 		{0FEE5A0E-3DD1-48CE-B20A-08FFF2B6DC60}.Debug2|Any CPU.Build.0 = Debug|Any CPU
 		{0FEE5A0E-3DD1-48CE-B20A-08FFF2B6DC60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FEE5A0E-3DD1-48CE-B20A-08FFF2B6DC60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC956E5C-5FAB-481E-BA9F-3BEB4E7E6B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC956E5C-5FAB-481E-BA9F-3BEB4E7E6B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC956E5C-5FAB-481E-BA9F-3BEB4E7E6B20}.Debug2|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC956E5C-5FAB-481E-BA9F-3BEB4E7E6B20}.Debug2|Any CPU.Build.0 = Debug|Any CPU
+		{DC956E5C-5FAB-481E-BA9F-3BEB4E7E6B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC956E5C-5FAB-481E-BA9F-3BEB4E7E6B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
