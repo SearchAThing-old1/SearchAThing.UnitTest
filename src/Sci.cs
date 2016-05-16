@@ -259,6 +259,26 @@ namespace SearchAThing.UnitTests
 
             }
 
+            // bbox
+            {
+                var pts = new List<Vector3D>()
+                {
+                    new Vector3D(1,5,8),
+                    new Vector3D(-2,-.5,9),
+                    new Vector3D(10,.5,.9)
+                };
+
+                var bbox = pts.BBox();
+
+                Assert.True(bbox.Min.EqualsTol(tolLen, -2, -.5, .9));
+                Assert.True(bbox.Max.EqualsTol(tolLen, 10, 5, 9));
+
+                var bbox2 = new BBox3D().Union(new Vector3D(1, 2, 3));
+                Assert.True(bbox.EqualsTol(tolLen, bbox.Union(bbox2)));
+
+                Assert.True(bbox.Contains(tolLen, bbox2));
+            }
+
         }
 
     }
