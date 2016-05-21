@@ -279,6 +279,27 @@ namespace SearchAThing.UnitTests
                 Assert.True(bbox.Contains(tolLen, bbox2));
             }
 
+            // measure unit
+            {
+                var mud = new MUDomain();
+
+                // Length
+                {
+                    var tol = mud.Length.Value;
+
+                    var mm = MUCollection.Length.mm;
+                    var m = MUCollection.Length.m;
+                    var km = MUCollection.Length.km;
+
+                    var a = (212356.435 * mm).ConvertTo(mud).Value;
+                    var b = (a / 1e3 * m).ConvertTo(mud).Value;
+                    var c = (b / 1e3 * km).ConvertTo(mud).Value;
+
+                    Assert.True(a.EqualsTol(tol, b));
+                    Assert.True(c.EqualsTol(tol, c));                    
+                }
+            }
+
         }
 
     }
