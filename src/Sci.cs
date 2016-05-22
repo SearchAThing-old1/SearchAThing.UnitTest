@@ -256,12 +256,12 @@ namespace SearchAThing.UnitTests
             var H = 900; var h = 50;
 
             var pts = new List<Vector3D>()
-                {
-                    new Vector3D(0, 0, 0), new Vector3D(B, 0, 0),
-                    new Vector3D(B, h, 0),new Vector3D(b, h, 0),
-                    new Vector3D(b, H+h, 0), new Vector3D(B, H+h, 0),
-                    new Vector3D(B, H +2*h, 0), new Vector3D(0, H+2*h, 0)
-                };
+            {
+                new Vector3D(0, 0, 0), new Vector3D(B, 0, 0),
+                new Vector3D(B, h, 0),new Vector3D(b, h, 0),
+                new Vector3D(b, H+h, 0), new Vector3D(B, H+h, 0),
+                new Vector3D(B, H +2*h, 0), new Vector3D(0, H+2*h, 0)
+            };
 
             // area
             var area = pts.Area(tolLen);
@@ -270,6 +270,18 @@ namespace SearchAThing.UnitTests
             // centroid
             Assert.True(pts.Centroid(tolLen, area).EqualsTol(tolLen, (2 * h * B * B / 2 + b * b * H / 2) / area, H / 2 + h, 0));
 
+            // segment contains point
+            // inner
+            Assert.True(pts.ContainsPoint(tolLen, new Vector3D(28.173, 275.518, 0)));
+            Assert.False(pts.ContainsPoint(tolLen, new Vector3D(78.044, 312.565, 0)));
+
+            // on right segment
+            Assert.True(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0)));
+            Assert.False(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0), excludePerimeter: true));
+
+            // on left segment
+            Assert.True(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0)));
+            Assert.False(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0), excludePerimeter: true));
         }
 
         [Fact(DisplayName = "BBox3D")]
