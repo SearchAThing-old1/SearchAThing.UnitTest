@@ -133,6 +133,12 @@ namespace SearchAThing.UnitTests
                 // or a result of such type of operation
                 Assert.True(new Vector3D(0.09, 0, 0.09).IsParallelTo(tmpTolLen, new Vector3D(-20, 0, -20)));
             }
+        }
+
+        [Fact]
+        void Line3DTest()
+        {
+            var tolLen = model.MUDomain.Length.Value;            
 
             // line contains point
             {
@@ -193,56 +199,63 @@ namespace SearchAThing.UnitTests
                 Assert.False(new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1))
                     .Colinear(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1.11))));
             }
+        }
 
-            // nr and vector stringification
-            {
-                Assert.True((0.5049).Stringify(3) == (0.5051).Stringify(3));
-                Assert.True(new Vector3D(0.5049, 1, 2).Stringify(3) == "0.505_1_2");
-            }
+        [Fact]
+        void VectorStringifyTest()
+        {
+            Assert.True((0.5049).Stringify(3) == (0.5051).Stringify(3));
+            Assert.True(new Vector3D(0.5049, 1, 2).Stringify(3) == "0.505_1_2");
+        }
 
-            // matrix
-            {
-                var m = new Matrix3D(new double[] {
-                    1, .5, 6,
-                    .1, 2, .05,
-                    .7, 11, .55
-                });
+        [Fact]
+        void Matrix3DTest()
+        {
+            var m = new Matrix3D(new double[] {
+                1, .5, 6,
+                .1, 2, .05,
+                .7, 11, .55
+            });
 
-                // det
-                Assert.True(m.Determinant().EqualsTol(1e-6, -1.260));
+            // det
+            Assert.True(m.Determinant().EqualsTol(1e-6, -1.260));
 
-                // inv
-                Assert.True(m.Inverse().EqualsTol(1e-3, new Matrix3D(new double[] {
-                    -0.437, -52.163, 9.504,
-                    0.016, 2.897, -0.437,
-                    0.238, 8.452, -1.548
-                })));
+            // inv
+            Assert.True(m.Inverse().EqualsTol(1e-3, new Matrix3D(new double[] {
+                -0.437, -52.163, 9.504,
+                0.016, 2.897, -0.437,
+                0.238, 8.452, -1.548
+            })));
 
-                // solve
-                Assert.True(m.Solve(1.1, 2.2, 3.3).EqualsTol(1e-3, new Vector3D(-83.875, 4.95, 13.75)));
-            }
+            // solve
+            Assert.True(m.Solve(1.1, 2.2, 3.3).EqualsTol(1e-3, new Vector3D(-83.875, 4.95, 13.75)));
+        }
 
-            // coordinate system
-            {
-                var p = new Vector3D(53.0147, 34.5182, 20.1);
+        [Fact]
+        void CoordinateSystemTest()
+        {
+            var p = new Vector3D(53.0147, 34.5182, 20.1);
 
-                var o = new Vector3D(15.3106, 22.97, 0);
-                var v1 = new Vector3D(10.3859, 3.3294, 30);
-                var v2 = new Vector3D(2.3515, 14.101, 0);
+            var o = new Vector3D(15.3106, 22.97, 0);
+            var v1 = new Vector3D(10.3859, 3.3294, 30);
+            var v2 = new Vector3D(2.3515, 14.101, 0);
 
-                var cs = new CoordinateSystem(o, v1, v2);
+            var cs = new CoordinateSystem(o, v1, v2);
 
-                var u = p.ToUCS(cs);
-                Assert.True(u.EqualsTol(1e-4, 32.3623, 12.6875, -27.3984));
-                Assert.True(u.ToWCS(cs).EqualsTol(1e-4, p));
-            }
+            var u = p.ToUCS(cs);
+            Assert.True(u.EqualsTol(1e-4, 32.3623, 12.6875, -27.3984));
+            Assert.True(u.ToWCS(cs).EqualsTol(1e-4, p));
+        }
 
-            // polygon
-            {
-                var B = 700; var b = 50;
-                var H = 900; var h = 50;
+        [Fact]
+        void PolygonTest()
+        {
+            var tolLen = model.MUDomain.Length.Value;
 
-                var pts = new List<Vector3D>()
+            var B = 700; var b = 50;
+            var H = 900; var h = 50;
+
+            var pts = new List<Vector3D>()
                 {
                     new Vector3D(0, 0, 0), new Vector3D(B, 0, 0),
                     new Vector3D(B, h, 0),new Vector3D(b, h, 0),
@@ -250,54 +263,57 @@ namespace SearchAThing.UnitTests
                     new Vector3D(B, H +2*h, 0), new Vector3D(0, H+2*h, 0)
                 };
 
-                // area
-                var area = pts.Area(tolLen);
-                Assert.True(area.EqualsTol(tolLen, 2 * B * h + H * b));
+            // area
+            var area = pts.Area(tolLen);
+            Assert.True(area.EqualsTol(tolLen, 2 * B * h + H * b));
 
-                // centroid
-                Assert.True(pts.Centroid(tolLen, area).EqualsTol(tolLen, (2 * h * B * B / 2 + b * b * H / 2) / area, H / 2 + h, 0));
+            // centroid
+            Assert.True(pts.Centroid(tolLen, area).EqualsTol(tolLen, (2 * h * B * B / 2 + b * b * H / 2) / area, H / 2 + h, 0));
 
-            }
+        }
 
-            // bbox
-            {
-                var pts = new List<Vector3D>()
+        [Fact]
+        void BBox3DTest()
+        {
+            var tolLen = model.MUDomain.Length.Value;
+
+            var pts = new List<Vector3D>()
                 {
                     new Vector3D(1,5,8),
                     new Vector3D(-2,-.5,9),
                     new Vector3D(10,.5,.9)
                 };
 
-                var bbox = pts.BBox();
+            var bbox = pts.BBox();
 
-                Assert.True(bbox.Min.EqualsTol(tolLen, -2, -.5, .9));
-                Assert.True(bbox.Max.EqualsTol(tolLen, 10, 5, 9));
+            Assert.True(bbox.Min.EqualsTol(tolLen, -2, -.5, .9));
+            Assert.True(bbox.Max.EqualsTol(tolLen, 10, 5, 9));
 
-                var bbox2 = new BBox3D().Union(new Vector3D(1, 2, 3));
-                Assert.True(bbox.EqualsTol(tolLen, bbox.Union(bbox2)));
+            var bbox2 = new BBox3D().Union(new Vector3D(1, 2, 3));
+            Assert.True(bbox.EqualsTol(tolLen, bbox.Union(bbox2)));
 
-                Assert.True(bbox.Contains(tolLen, bbox2));
-            }
+            Assert.True(bbox.Contains(tolLen, bbox2));
+        }
 
-            // measure unit
+        [Fact]
+        void MeasureUnitTest()
+        {
+            var mud = new MUDomain();
+
+            // Length
             {
-                var mud = new MUDomain();
+                var tol = mud.Length.Value;
 
-                // Length
-                {
-                    var tol = mud.Length.Value;
+                var mm = MUCollection.Length.mm;
+                var m = MUCollection.Length.m;
+                var km = MUCollection.Length.km;
 
-                    var mm = MUCollection.Length.mm;
-                    var m = MUCollection.Length.m;
-                    var km = MUCollection.Length.km;
+                var a = (212356.435 * mm).ConvertTo(mud).Value;
+                var b = (a / 1e3 * m).ConvertTo(mud).Value;
+                var c = (b / 1e3 * km).ConvertTo(mud).Value;
 
-                    var a = (212356.435 * mm).ConvertTo(mud).Value;
-                    var b = (a / 1e3 * m).ConvertTo(mud).Value;
-                    var c = (b / 1e3 * km).ConvertTo(mud).Value;
-
-                    Assert.True(a.EqualsTol(tol, b));
-                    Assert.True(c.EqualsTol(tol, c));                    
-                }
+                Assert.True(a.EqualsTol(tol, b));
+                Assert.True(c.EqualsTol(tol, c));
             }
 
         }
