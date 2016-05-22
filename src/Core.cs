@@ -51,7 +51,7 @@ namespace SearchAThing.UnitTests
         /// <summary>
         /// Event opertion with custom args.
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "EventOperation_CustomArg")]
         public void Test1()
         {
             IEventOperation<MyEventArgs> op = new EventOperation<MyEventArgs>();
@@ -70,7 +70,7 @@ namespace SearchAThing.UnitTests
         /// <summary>
         /// FireCount, HandledCount.
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "EventOperation_Count")]
         public void Test2()
         {
             IEventOperation op = new EventOperation();
@@ -101,7 +101,7 @@ namespace SearchAThing.UnitTests
         /// <summary>
         /// Event fired, but not handler yet attached.
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "EventOperation_NotYet")]
         public void Test3()
         {
             IEventOperation op = new EventOperation();
@@ -119,7 +119,7 @@ namespace SearchAThing.UnitTests
         /// <summary>
         /// Be notified after the event fired.
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "EventOperation_After")]
         public void Test4()
         {
             IEventOperation op = new EventOperation(EventOperationBehaviorTypes.RemindPastEvents);
@@ -140,7 +140,7 @@ namespace SearchAThing.UnitTests
         /// <summary>
         /// Be notified after the event fired (multiple listeners).
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "EventOperation_Multiple")]
         public void Test5()
         {
             IEventOperation op = new EventOperation(EventOperationBehaviorTypes.RemindPastEvents);
@@ -177,7 +177,7 @@ namespace SearchAThing.UnitTests
 
         #region string [tests]
 
-        [Fact]
+        [Fact(DisplayName = "String")]
         public void StringTest1()
         {
             var s1 = "Hi this is a sample";

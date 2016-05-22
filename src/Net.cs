@@ -40,19 +40,19 @@ namespace SearchAThing.UnitTests
         /// <summary>
         /// Checksum tests
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "Checksum")]
         public void Test1()
         {
             /*0000   45 00 00 28 2e 27 40 00 80 06 xx07 xxee c0 a8 00 64  E..(.'@........d
 0010   6c a8 97 06                                      l...*/
-          
+
             Assert.True(new byte[]
             {
                 0x45, 0x00, 0x00, 0x28, 0x2e, 0x27, 0x40, 0x00, 0x80, 0x06,
                 0x00, 0x00, 0xc0, 0xa8, 0x00, 0x64, 0x6c, 0xa8, 0x97, 0x06
             }.Checksum() == 0x07ee);
 
-            Assert.True(new byte[] { 0 }.Checksum() == 0xffff);            
+            Assert.True(new byte[] { 0 }.Checksum() == 0xffff);
             Assert.True(new byte[] { 0, 0xff }.Checksum() == 0xff00);
             Assert.True(new byte[] { 0xff }.Checksum() == 0xff);
         }

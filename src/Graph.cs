@@ -38,7 +38,7 @@ namespace SearchAThing.UnitTests
 
         #region monitor plot [tests]
 
-        [Fact]
+        [Fact(DisplayName = "MonitorPlot")]
         public void MonitorPlotTest1()
         {
             IMonitorPlot plot = new MonitorPlot(3);

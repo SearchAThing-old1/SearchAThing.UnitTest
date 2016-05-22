@@ -35,7 +35,7 @@ namespace SearchAThing.UnitTests
     {
 
         #region circular list [tests]
-        [Fact]
+        [Fact(DisplayName = "CircularList")]
         public void CircularListTest1()
         {
             var lst = new CircularList<int>(5);
@@ -65,7 +65,7 @@ namespace SearchAThing.UnitTests
         /// <summary>
         /// Test enumerator
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "CircularList_enum")]
         public void CircularListTest2()
         {
             var lst = new CircularList<int>(5);
