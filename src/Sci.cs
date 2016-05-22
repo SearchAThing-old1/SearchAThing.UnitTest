@@ -37,7 +37,7 @@ namespace SearchAThing.UnitTests
     {
         IModel model = new SampleModel();
 
-        [Fact]
+        [Fact(DisplayName = "Vector3D")]
         public void Vector3DTest()
         {
             var tolLen = model.MUDomain.Length.Value;
@@ -135,10 +135,10 @@ namespace SearchAThing.UnitTests
             }
         }
 
-        [Fact]
+        [Fact(DisplayName = "Line3D")]
         void Line3DTest()
         {
-            var tolLen = model.MUDomain.Length.Value;            
+            var tolLen = model.MUDomain.Length.Value;
 
             // line contains point
             {
@@ -201,14 +201,14 @@ namespace SearchAThing.UnitTests
             }
         }
 
-        [Fact]
+        [Fact(DisplayName = "VectorStringify")]
         void VectorStringifyTest()
         {
             Assert.True((0.5049).Stringify(3) == (0.5051).Stringify(3));
             Assert.True(new Vector3D(0.5049, 1, 2).Stringify(3) == "0.505_1_2");
         }
 
-        [Fact]
+        [Fact(DisplayName = "Matrix3D")]
         void Matrix3DTest()
         {
             var m = new Matrix3D(new double[] {
@@ -231,7 +231,7 @@ namespace SearchAThing.UnitTests
             Assert.True(m.Solve(1.1, 2.2, 3.3).EqualsTol(1e-3, new Vector3D(-83.875, 4.95, 13.75)));
         }
 
-        [Fact]
+        [Fact(DisplayName = "CoordinateSystem")]
         void CoordinateSystemTest()
         {
             var p = new Vector3D(53.0147, 34.5182, 20.1);
@@ -247,7 +247,7 @@ namespace SearchAThing.UnitTests
             Assert.True(u.ToWCS(cs).EqualsTol(1e-4, p));
         }
 
-        [Fact]
+        [Fact(DisplayName = "Polygon")]
         void PolygonTest()
         {
             var tolLen = model.MUDomain.Length.Value;
@@ -272,7 +272,7 @@ namespace SearchAThing.UnitTests
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "BBox3D")]
         void BBox3DTest()
         {
             var tolLen = model.MUDomain.Length.Value;
@@ -295,7 +295,7 @@ namespace SearchAThing.UnitTests
             Assert.True(bbox.Contains(tolLen, bbox2));
         }
 
-        [Fact]
+        [Fact(DisplayName = "MeasureUnit")]
         void MeasureUnitTest()
         {
             var mud = new MUDomain();
@@ -314,6 +314,41 @@ namespace SearchAThing.UnitTests
 
                 Assert.True(a.EqualsTol(tol, b));
                 Assert.True(c.EqualsTol(tol, c));
+            }
+
+            // Temperature
+            {
+                var tol = mud.Temperature.Value;
+
+                var C = MUCollection.Temperature.C;
+                var K = MUCollection.Temperature.K;
+                var F = MUCollection.Temperature.F;
+
+                var C_ = 20.35;
+                var K_ = 293.5;
+                var F_ = 68.63;
+
+                {
+                    var T = (C_ * C);
+
+                    Assert.True(T.ConvertTo(K).Value.EqualsTol(1e-1, K_));
+                    Assert.True(T.ConvertTo(F).Value.EqualsTol(1e-2, F_));
+                }
+
+                {
+                    var T = (K_ * K);
+
+                    Assert.True(T.ConvertTo(C).Value.EqualsTol(1e-2, C_));
+                    Assert.True(T.ConvertTo(F).Value.EqualsTol(1e-2, F_));
+                }
+
+                {
+                    var T = (F_ * F);
+
+                    Assert.True(T.ConvertTo(C).Value.EqualsTol(1e-2, C_));
+                    Assert.True(T.ConvertTo(K).Value.EqualsTol(1e-1, K_));
+                }
+
             }
 
         }
