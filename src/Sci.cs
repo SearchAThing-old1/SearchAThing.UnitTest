@@ -231,8 +231,8 @@ namespace SearchAThing.UnitTests
             Assert.True(m.Solve(1.1, 2.2, 3.3).EqualsTol(1e-3, new Vector3D(-83.875, 4.95, 13.75)));
         }
 
-        [Fact(DisplayName = "CoordinateSystem")]
-        void CoordinateSystemTest()
+        [Fact(DisplayName = "CoordinateSystem3D")]
+        void Coordinate3DSystemTest()
         {
             var p = new Vector3D(53.0147, 34.5182, 20.1);
 
@@ -240,11 +240,40 @@ namespace SearchAThing.UnitTests
             var v1 = new Vector3D(10.3859, 3.3294, 30);
             var v2 = new Vector3D(2.3515, 14.101, 0);
 
-            var cs = new CoordinateSystem(o, v1, v2);
+            var cs = new CoordinateSystem3D(o, v1, v2);
 
             var u = p.ToUCS(cs);
             Assert.True(u.EqualsTol(1e-4, 32.3623, 12.6875, -27.3984));
             Assert.True(u.ToWCS(cs).EqualsTol(1e-4, p));
+        }
+
+        [Fact(DisplayName = "Plane3D")]
+        void Plane3DTest()
+        {
+            var tol = model.MUDomain.Length.Value;
+
+            var plane = new Plane3D(new CoordinateSystem3D(Vector3D.Zero, Vector3D.XAxis, Vector3D.YAxis));
+
+            var q = new Line3D(new Vector3D(1, -3, -5), new Vector3D(10, 4, 6)).Intersect(tol, plane);
+
+            Assert.True(q.EqualsTol(tol, 5.091, 0.182, 0));
+        }
+
+        [Fact(DisplayName = "Circle3D")]
+        void Circle3DTest()
+        {
+            var tol = model.MUDomain.Length.Value;
+
+            var circle = new Circle3D(
+                new Vector3D(52.563, 177.463, 0),
+                new Vector3D(180.94, 258.505, 0),
+                new Vector3D(297.124, 112.916, 50));
+
+            Assert.True(circle.Radius.EqualsTol(tol, 129.65));
+            Assert.True(circle.Area.EqualsTol(tol, 52808.74));
+            Assert.True(circle.Center.EqualsTol(tol, 170.91, 132.17, 27.40));
+            Assert.True(circle.CS.BaseX.EqualsTol(Constants.NormalizedLengthTolerance, -0.9128, 0.3492, -0.2113));
+            Assert.True(circle.CS.BaseY.EqualsTol(Constants.NormalizedLengthTolerance, 0.3837, 0.9107, -0.1526));
         }
 
         [Fact(DisplayName = "Polygon")]
@@ -365,6 +394,16 @@ namespace SearchAThing.UnitTests
 
         }
 
+        /*
+        [Fact(DisplayName = "ConvexHull")]
+        void ConvexHullTest()
+        {
+            var pts = new List<Vector3D>();
+
+            pts.SampleIp();
+
+        }
+        */
     }
 
 }
