@@ -257,6 +257,9 @@ namespace SearchAThing.UnitTests
             var q = new Line3D(new Vector3D(1, -3, -5), new Vector3D(10, 4, 6)).Intersect(tol, plane);
 
             Assert.True(q.EqualsTol(tol, 5.091, 0.182, 0));
+
+            Assert.True(plane.CS.IsParallelTo(tol, new Plane3D(new CoordinateSystem3D(
+                new Vector3D(0, 0, 1), new Vector3D(-1, 0, 0), new Vector3D(0, -1, 0))).CS));
         }
 
         [Fact(DisplayName = "Circle3D")]
