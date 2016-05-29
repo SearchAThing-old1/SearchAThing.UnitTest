@@ -28,7 +28,9 @@ using SearchAThing.Sci;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using System.Linq;
 using static System.Math;
+using System.Diagnostics;
 
 namespace SearchAThing.UnitTests
 {
@@ -135,6 +137,75 @@ namespace SearchAThing.UnitTests
             }
         }
 
+        [Fact(DisplayName = "Vector3DCmp")]
+        void Vector3DCmp()
+        {
+            var tol = 1e-3;
+            var cmp = new Vector3DEqualityComparer(tol);
+
+            {
+                var rnd = new Random();
+                var lst = new List<Vector3D>();
+                for (int i = 0; i < 150; ++i)
+                {
+                    lst.Add(new Vector3D(rnd.NextDouble(), rnd.NextDouble(), rnd.NextDouble()));
+                }
+                var last = lst.Last();
+                var someIn = new Vector3D(last.X, last.Y, last.Z); // different reference
+
+                var K = 100000;
+                var cnt = 0;
+
+                var hs = new HashSet<Vector3D>(); // with-out Vector3DCompare it search for same ref
+                lst.ForEach(w => hs.Add(w));
+                for (int j = 0; j < K; ++j)
+                {
+                    if (hs.Contains(someIn)) ++cnt;
+                }
+                Assert.True(cnt == 0); // and it don't found
+
+                var sw1 = new Stopwatch();
+                sw1.Start();
+                hs = new HashSet<Vector3D>(cmp); // using the comparer it search for value
+                lst.ForEach(w => hs.Add(w));
+                cnt = 0;
+                for (int j = 0; j < K; ++j)
+                {
+                    if (hs.Contains(someIn)) ++cnt;
+                }
+                Assert.True(cnt == K);
+                sw1.Stop();
+
+                // using list it should run slower
+                var sw2 = new Stopwatch();
+                sw2.Start();
+                cnt = 0;
+                for (int j = 0; j < K; ++j)
+                {
+                    if (lst.Any(r => r.EqualsTol(tol, someIn))) // word case
+                        ++cnt;
+                }
+                Assert.True(cnt == K);
+                sw2.Stop();
+
+                // sw1.Elapsed	{00:00:00.0195037}	System.TimeSpan
+                // sw2.Elapsed	{00:00:01.0507771}	System.TimeSpan
+
+                Assert.True(sw1.Elapsed < sw2.Elapsed);
+            }
+
+            {
+                var lst = Vector3D.From3DCoords(
+                    .004, .45, 30
+                    );
+
+                // tol is 1e-3
+                Assert.True(lst.Contains(new Vector3D(.004, .45, 30), cmp));
+                Assert.True(lst.Contains(new Vector3D(.0049, .45, 30), cmp));
+                Assert.False(lst.Contains(new Vector3D(.0051, .45, 30), cmp));
+            }
+        }
+
         [Fact(DisplayName = "Line3D")]
         void Line3DTest()
         {
@@ -201,13 +272,7 @@ namespace SearchAThing.UnitTests
             }
         }
 
-        [Fact(DisplayName = "VectorStringify")]
-        void VectorStringifyTest()
-        {
-            Assert.True((0.5049).Stringify(3) == (0.5051).Stringify(3));
-            Assert.True(new Vector3D(0.5049, 1, 2).Stringify(3) == "0.505_1_2");
-        }
-
+    
         [Fact(DisplayName = "Matrix3D")]
         void Matrix3DTest()
         {
@@ -316,17 +381,56 @@ namespace SearchAThing.UnitTests
             Assert.False(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0), excludePerimeter: true));
         }
 
+        [Fact(DisplayName = "SortPolygon")]
+        void SortPolygonTest()
+        {
+            var tol = model.MUDomain.Length.Value;
+
+            {
+                var p1 = new Vector3D(-19.331, 168.749, 0);
+                var p2 = new Vector3D(95.57, 90.108, 0);
+                var p3 = new Vector3D(286.757, 182.876, 0);
+                var p4 = new Vector3D(149.253, 277.528, 0);
+                var p5 = new Vector3D(29.173, 265.755, 0);
+
+                var pts = new List<Vector3D>() { p4, p2, p5, p3, p1 };
+
+                var pts2 = pts.SortPoly(tol).ToList();
+
+                Assert.True(
+                    pts2[0].EqualsTol(tol, p3) &&
+                    pts2[1].EqualsTol(tol, p2) &&
+                    pts2[2].EqualsTol(tol, p1) &&
+                    pts2[3].EqualsTol(tol, p5) &&
+                    pts2[4].EqualsTol(tol, p4));
+            }
+
+            {
+                var pts = Vector3D.From2DCoords(
+                    100, 500,
+                    300, 700,
+                    300, 500,
+                    100, 700);
+
+                var pts2 = pts.SortPoly(tol).ToList();
+
+                Assert.True(pts2.EqualsTol(tol, Vector3D.From2DCoords(
+                    300, 500,
+                    300, 700,
+                    100, 700,
+                    100, 500)));
+            }
+        }
+
         [Fact(DisplayName = "BBox3D")]
         void BBox3DTest()
         {
             var tolLen = model.MUDomain.Length.Value;
 
-            var pts = new List<Vector3D>()
-                {
-                    new Vector3D(1,5,8),
-                    new Vector3D(-2,-.5,9),
-                    new Vector3D(10,.5,.9)
-                };
+            var pts = Vector3D.From3DCoords(
+                1, 5, 8,
+                -2, -.5, 9,
+                10, .5, .9);
 
             var bbox = pts.BBox();
 
