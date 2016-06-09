@@ -137,6 +137,27 @@ namespace SearchAThing.UnitTests
             }
         }
 
+        [Fact(DisplayName = "Helpers")]
+        void HelpersTest()
+        {
+            // MRound
+            Assert.True((1.32).MRound(.2).EqualsTol(1e-6, 1.4));
+            Assert.True((56781.52).MRound(125).EqualsTol(1e-6, 56750));
+
+            // Magnitude
+            Assert.True((190.0).Magnitude() == 2);
+            Assert.True((.0034).Magnitude() == -3);
+
+            Assert.True((0.1).Magnitude() == -1);
+            Assert.True((0.0).Magnitude() == 0);
+            Assert.True((1.0).Magnitude() == 0);
+            Assert.True((10.0).Magnitude() == 1);
+
+            // RoundTol
+            Assert.True((1923.56789).MRound(1e-1).EqualsTol(1e-6, 1923.6));
+            Assert.True((1923.52789).MRound(1e-1).EqualsTol(1e-6, 1923.5));
+        }
+
         [Fact(DisplayName = "Vector3DCmp")]
         void Vector3DCmp()
         {
@@ -272,7 +293,7 @@ namespace SearchAThing.UnitTests
             }
         }
 
-    
+
         [Fact(DisplayName = "Matrix3D")]
         void Matrix3DTest()
         {

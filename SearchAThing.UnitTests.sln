@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Core", "..\Sea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Graph", "..\SearchAThing.Graph\src\SearchAThing.Graph.csproj", "{D818C09A-9E98-46B4-98C7-81836B7F9585}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Collections", "..\SearchAThing.Collections\src\SearchAThing.Collections.csproj", "{5B7D3F82-9B6F-476F-873F-92A36B96E8ED}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Net", "..\SearchAThing.Net\src\SearchAThing.Net.csproj", "{81CF49DB-BD2E-4C72-8016-9268234A2C88}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAThing.Sci", "..\SearchAThing.Sci\src\SearchAThing.Sci.csproj", "{F9D7F0EE-D4FF-4455-87BE-08539D2D1982}"
@@ -38,12 +36,6 @@ Global
 		{D818C09A-9E98-46B4-98C7-81836B7F9585}.Debug2|Any CPU.Build.0 = Debug|Any CPU
 		{D818C09A-9E98-46B4-98C7-81836B7F9585}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D818C09A-9E98-46B4-98C7-81836B7F9585}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B7D3F82-9B6F-476F-873F-92A36B96E8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B7D3F82-9B6F-476F-873F-92A36B96E8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B7D3F82-9B6F-476F-873F-92A36B96E8ED}.Debug2|Any CPU.ActiveCfg = Debug2|Any CPU
-		{5B7D3F82-9B6F-476F-873F-92A36B96E8ED}.Debug2|Any CPU.Build.0 = Debug2|Any CPU
-		{5B7D3F82-9B6F-476F-873F-92A36B96E8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B7D3F82-9B6F-476F-873F-92A36B96E8ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81CF49DB-BD2E-4C72-8016-9268234A2C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81CF49DB-BD2E-4C72-8016-9268234A2C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81CF49DB-BD2E-4C72-8016-9268234A2C88}.Debug2|Any CPU.ActiveCfg = Debug2|Any CPU

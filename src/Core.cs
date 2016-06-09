@@ -27,6 +27,8 @@
 using SearchAThing.Core;
 using System;
 using Xunit;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace SearchAThing.UnitTests
 {
@@ -191,6 +193,89 @@ namespace SearchAThing.UnitTests
 
         #endregion
 
+        #region circular list [tests]
+        [Fact(DisplayName = "CircularList")]
+        public void CircularListTest1()
+        {
+            var lst = new CircularList<int>(5);
+
+            for (int i = 0; i < 5; ++i) lst.Add(i);
+
+            // verify assert's integrity
+            Assert.True(lst.Count == 5);
+            Assert.True(lst.GetItem(0) == 0);
+            Assert.True(lst.GetItem(4) == 4);
+
+            lst.Add(5); // step out from the max size
+
+            Assert.True(lst.Count == 5);
+            Assert.True(lst.GetItem(0) == 1);
+            Assert.True(lst.GetItem(4) == 5);
+
+            // complete count items
+            for (int i = 0; i < 4; ++i) lst.Add(6 + i);
+
+            // verify assert's integrity
+            Assert.True(lst.Count == 5);
+            Assert.True(lst.GetItem(0) == 5);
+            Assert.True(lst.GetItem(4) == 9);
+        }
+
+        /// <summary>
+        /// Test enumerator
+        /// </summary>
+        [Fact(DisplayName = "CircularList_enum")]
+        public void CircularListTest2()
+        {
+            var lst = new CircularList<int>(5);
+
+            for (int i = 0; i < 15; ++i) lst.Add(i);
+
+            // verify assert's integrity
+            Assert.True(lst.Count == 5);
+            Assert.True(lst.GetItem(0) == 10);
+            Assert.True(lst.GetItem(4) == 14);
+
+            var l = lst.Items.ToList();
+
+            Assert.True(l.Count == 5);
+            Assert.True(l[0] == 10);
+            Assert.True(l[4] == 14);
+        }
+        #endregion
+
+        #region fluent
+        [Fact(DisplayName = "Fluent")]
+        public void FluentTest()
+        {
+            int cycles = 0;
+            Func<int, int> IntensiveFn = (x) => { ++cycles; return x; };
+            {
+                cycles = 0;
+
+                Assert.True(IntensiveFn(1) == 10 || IntensiveFn(1) == 1);
+                Assert.True(cycles == 2);
+            }
+
+            {
+                cycles = 0;
+
+                Assert.True(IntensiveFn(1).Eval(x => x == 10 || x == 1));
+                Assert.True(cycles == 1);
+            }
+        }
+        #endregion
+
+        #region circular list [tests]
+        [Fact(DisplayName = "CircularEnumerator")]
+        public void CircularEnumeratorTest()
+        {
+            var s = new List<int>() { 1, 2, 3 }.AsCircularEnumerable();
+
+            Assert.True(s.Take(7).SequenceEqual(new List<int>() { 1, 2, 3, 1, 2, 3, 1 }));
+            Assert.True(s.Skip(4).Take(4).SequenceEqual(new List<int>() { 2, 3, 1, 2 }));
+        }
+        #endregion
     }
 
 }
