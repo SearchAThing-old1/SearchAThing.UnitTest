@@ -260,7 +260,7 @@ namespace SearchAThing.UnitTests
             {
                 cycles = 0;
 
-                Assert.True(IntensiveFn(1).Eval(x => x == 10 || x == 1));
+                Assert.True(IntensiveFn(1).Function(x => x == 10 || x == 1));
                 Assert.True(cycles == 1);
             }
         }
