@@ -368,12 +368,13 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "Polygon")]
         void PolygonTest()
         {
-            var tolLen = model.MUDomain.Length.Value;
+            {
+                var tolLen = model.MUDomain.Length.Value;
 
-            var B = 700; var b = 50;
-            var H = 900; var h = 50;
+                var B = 700; var b = 50;
+                var H = 900; var h = 50;
 
-            var pts = new List<Vector3D>()
+                var pts = new List<Vector3D>()
             {
                 new Vector3D(0, 0, 0), new Vector3D(B, 0, 0),
                 new Vector3D(B, h, 0),new Vector3D(b, h, 0),
@@ -381,25 +382,39 @@ namespace SearchAThing.UnitTests
                 new Vector3D(B, H +2*h, 0), new Vector3D(0, H+2*h, 0)
             };
 
-            // area
-            var area = pts.Area(tolLen);
-            Assert.True(area.EqualsTol(tolLen, 2 * B * h + H * b));
+                // area
+                var area = pts.Area(tolLen);
+                Assert.True(area.EqualsTol(tolLen, 2 * B * h + H * b));
 
-            // centroid
-            Assert.True(pts.Centroid(tolLen, area).EqualsTol(tolLen, (2 * h * B * B / 2 + b * b * H / 2) / area, H / 2 + h, 0));
+                // centroid
+                Assert.True(pts.Centroid(tolLen, area).EqualsTol(tolLen, (2 * h * B * B / 2 + b * b * H / 2) / area, H / 2 + h, 0));
 
-            // segment contains point
-            // inner
-            Assert.True(pts.ContainsPoint(tolLen, new Vector3D(28.173, 275.518, 0)));
-            Assert.False(pts.ContainsPoint(tolLen, new Vector3D(78.044, 312.565, 0)));
+                // segment contains point
+                // inner
+                Assert.True(pts.ContainsPoint(tolLen, new Vector3D(28.173, 275.518, 0)));
+                Assert.False(pts.ContainsPoint(tolLen, new Vector3D(78.044, 312.565, 0)));
 
-            // on right segment
-            Assert.True(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0)));
-            Assert.False(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0), excludePerimeter: true));
+                // on right segment
+                Assert.True(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0)));
+                Assert.False(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0), excludePerimeter: true));
 
-            // on left segment
-            Assert.True(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0)));
-            Assert.False(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0), excludePerimeter: true));
+                // on left segment
+                Assert.True(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0)));
+                Assert.False(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0), excludePerimeter: true));
+            }
+
+            {
+                var tol = 1e-2;
+
+                var pts = Vector3D.From2DCoords(
+                    68.12, 78.93,
+                    71.86, 75.28,
+                    71.68, 74.92,
+                    71.18, 74.56,
+                    67.03, 78.61);
+
+                Assert.True(pts.Area(tol).EqualsTol(5.51624999, 1e-6));
+            }
         }
 
         [Fact(DisplayName = "SortPolygon")]
