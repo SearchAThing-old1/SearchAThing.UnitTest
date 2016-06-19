@@ -31,12 +31,13 @@ using Xunit;
 using System.Linq;
 using static System.Math;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace SearchAThing.UnitTests
 {
 
     public class Sci
-    {
+    {        
         IModel model = new SampleModel();
 
         [Fact(DisplayName = "Vector3D")]
@@ -481,7 +482,16 @@ namespace SearchAThing.UnitTests
 
         [Fact(DisplayName = "MeasureUnit")]
         void MeasureUnitTest()
-        {
+        {            
+            {
+                 
+                var measure = Measure.TryParse("10mm [Length]", null, CultureInfo.InvariantCulture);
+                Assert.True(measure != null && 
+                    measure.MU == MUCollection.Length.mm &&
+                    measure.MU.PhysicalQuantity == PQCollection.Length &&
+                    Abs(measure.Value-10) < 1e-3);
+            }
+
             var mud = new MUDomain();
 
             // Length
