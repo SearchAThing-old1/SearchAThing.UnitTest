@@ -33,6 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.2.4\lib\net45\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.2.4\lib\net45\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.2.4\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database.cs" />
     <Compile Include="Sci.cs" />
     <Compile Include="Net.cs" />
     <Compile Include="Graph.cs" />
@@ -69,6 +82,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\netdxf\netDxf\netDxf.csproj">
+      <Project>{785380e0-ceb9-4c34-82e5-60d0e33e848e}</Project>
+      <Name>netDxf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SearchAThing.Core\src\SearchAThing.Core.csproj">
       <Project>{8162a30e-a46d-4a78-ba12-1f376ac6f1b4}</Project>
       <Name>SearchAThing.Core</Name>
@@ -76,6 +93,10 @@
     <ProjectReference Include="..\..\SearchAThing.Graph\src\SearchAThing.Graph.csproj">
       <Project>{d818c09a-9e98-46b4-98c7-81836b7f9585}</Project>
       <Name>SearchAThing.Graph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SearchAThing.MongoDB\src\SearchAThing.MongoDB.csproj">
+      <Project>{f5ffa03a-b8fe-4d00-a143-976f7572c8c1}</Project>
+      <Name>SearchAThing.MongoDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SearchAThing.Net\src\SearchAThing.Net.csproj">
       <Project>{81cf49db-bd2e-4c72-8016-9268234a2c88}</Project>
