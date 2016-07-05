@@ -41,191 +41,27 @@ namespace SearchAThing.UnitTests
     namespace MongoConcurrencyTypes
     {
 
-        public class I : IMongoEntityTrackChanges, INotifyPropertyChanged, ISupportInitialize
+        public class I
         {
 
             public I()
             {
-                _TrackChanges = new MongoEntityTrackChanges();
             }
 
-            #region INotifyPropertyChanged [pce]       
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected void SendPropertyChanged(string propertyName)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-            #endregion
+            public string iprop1 { get; set; }
+            public string iprop2 { get; set; }
 
-            #region IMongoEntityTrackChanges
-            MongoEntityTrackChanges _TrackChanges;
-            public MongoEntityTrackChanges TrackChanges { get { return _TrackChanges; } }
-            #endregion
-
-            #region ISupportInitialize
-            public void BeginInit()
-            {
-                _TrackChanges = null;
-            }
-
-            public void EndInit()
-            {
-                _TrackChanges = new MongoEntityTrackChanges();
-            }
-            #endregion
-
-            #region iprop1 [pc]
-            string _iprop1;
-            public string iprop1
-            {
-                get
-                {
-                    return _iprop1;
-                }
-                set
-                {
-                    if (_iprop1 != value)
-                    {
-                        _iprop1 = value;
-                        TrackChanges?.ChangedProperties.Add("iprop1");
-                        SendPropertyChanged("iprop1");
-                    }
-                }
-            }
-            #endregion
-
-            #region iprop2 [pc]
-            string _iprop2;
-            public string iprop2
-            {
-                get
-                {
-                    return _iprop2;
-                }
-                set
-                {
-                    if (_iprop2 != value)
-                    {
-                        _iprop2 = value;
-                        TrackChanges?.ChangedProperties.Add("iprop2");
-                        SendPropertyChanged("iprop2");
-                    }
-                }
-            }
-            #endregion
-
-            #region Set [pc]
-            List<I> _Set;
-            public List<I> Set
-            {
-                get
-                {
-                    return _Set;
-                }
-                set
-                {
-                    if (_Set != value)
-                    {
-                        _Set = value;
-                        SendPropertyChanged("Set");
-                    }
-                }
-            }
-            #endregion
-
+            public List<I> Set { get; set; }
         }
 
-        public class A : Entity, IMongoEntityTrackChanges, INotifyPropertyChanged, ISupportInitialize
+        public class A : MongoEntity
         {
 
-            public A()
-            {
-                _TrackChanges = new MongoEntityTrackChanges();
-            }
 
-            #region INotifyPropertyChanged [pce]       
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected void SendPropertyChanged(string propertyName)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-            #endregion
+            public string prop1 { get; set; }
+            public string prop2 { get; set; }
 
-            #region IMongoEntityTrackChanges
-            MongoEntityTrackChanges _TrackChanges;
-            public MongoEntityTrackChanges TrackChanges { get { return _TrackChanges; } }
-            #endregion
-
-            #region ISupportInitialize
-            public void BeginInit()
-            {
-                _TrackChanges = null;
-            }
-
-            public void EndInit()
-            {
-                _TrackChanges = new MongoEntityTrackChanges();
-            }
-            #endregion
-
-            #region prop1 [pc]
-            string _prop1;
-            public string prop1
-            {
-                get
-                {
-                    return _prop1;
-                }
-                set
-                {
-                    if (_prop1 != value)
-                    {
-                        _prop1 = value;
-                        TrackChanges?.ChangedProperties.Add("prop1");
-                        SendPropertyChanged("prop1");
-                    }
-                }
-            }
-            #endregion
-
-            #region prop2 [pc]
-            string _prop2;
-            public string prop2
-            {
-                get
-                {
-                    return _prop2;
-                }
-                set
-                {
-                    if (_prop2 != value)
-                    {
-                        _prop2 = value;
-                        TrackChanges?.ChangedProperties.Add("prop2");
-                        SendPropertyChanged("prop2");
-                    }
-                }
-            }
-            #endregion
-
-            #region Set [pc]
-            List<I> _Set;
-            public List<I> Set
-            {
-                get
-                {
-                    return _Set;
-                }
-                set
-                {
-                    if (_Set != value)
-                    {
-                        _Set = value;
-                        SendPropertyChanged("Set");
-                    }
-                }
-            }
-            #endregion
+            public List<I> Set { get; set; }
 
         }
 
@@ -240,18 +76,27 @@ namespace SearchAThing.UnitTests
             const string connectionString = @"mongodb://localhost:27017/searchathing_unittest_mongoconcurrency";
 
             {
-                var repo = new Repository<A>(connectionString);
+                var ctx = new MongoContext(connectionString);
 
                 // set data            
-                repo.FindAll().ToList().Foreach(w => repo.Delete(w));
+                //ctx.FindAll<A>().ToList().Foreach(w => repo.Delete(w)); // TODO
                 var iz = new I() { iprop1 = "z1", iprop2 = "z2" };
-                var iy = new I() { iprop1 = "y1", iprop2 = "y2", Set = new List<I>() { iz } };
-                var a = new A() { prop1 = "x1", prop2 = "x2", Set = new List<I>() { iy } };
-                repo.Insert(a);
+                var iy = new I() { iprop1 = "y1", iprop2 = "y2" }; //, Set = new List<I>() { iz } };
+                var a = ctx.New<A>();
+                a.prop1 = "x1";
+                a.prop2 = "x2";
+                a.Set = new List<I>() { iy };
+                ctx.Save();
+
+                // set coll prop
+                iy.Set = new List<I>() { iz };
+                ctx.Save();
 
                 // retrieve two istance of the same document
-                var doc1 = repo.First();
-                var doc2 = repo.First();
+                var doc1 = ctx.FindAll<A>().First();
+                var doc2 = ctx.FindAll<A>().First();
+
+                Assert.False(object.ReferenceEquals(doc1, doc2));
 
                 // modify (1)
                 {
@@ -260,8 +105,7 @@ namespace SearchAThing.UnitTests
                     var itemy = doc1.Set.First();
                     var sety1 = itemy.Set;
                     var toremove = sety1.First();
-                    sety1.Remove(toremove);
-                    sety1.SetAsDeleted(itemy, toremove); // [1.1]
+                    sety1.Remove(toremove); // [1.1]
 
                     var iyy1 = new I() { iprop1 = "yy1", iprop2 = "yy2" };
                     doc1.Set.Add(iyy1); // [1.2]
@@ -272,9 +116,7 @@ namespace SearchAThing.UnitTests
                     doc2.prop2 = "_x2_"; // [2]
                 }
 
-                // commmit w/track
-                doc1.UpdateWithTrack(repo);
-                doc2.UpdateWithTrack(repo);
+                ctx.Save();
             }
 
             {
