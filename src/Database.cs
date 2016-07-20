@@ -24,7 +24,6 @@
 */
 #endregion
 
-using Repository.Mongo;
 using SearchAThing.Core;
 using SearchAThing.Graph;
 using SearchAThing.MongoDB;
@@ -34,6 +33,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Xunit;
+using MongoDB.Driver.Linq;
+using MongoDB.Driver;
 
 namespace SearchAThing.UnitTests
 {
@@ -73,13 +74,13 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "MongoConcurrency")]
         public void MongoConcurrency()
         {
-            const string connectionString = @"mongodb://localhost:27017/searchathing_unittest_mongoconcurrency";
+            const string connectionString = @"mongodb://localhost/searchathing_unittest_mongoconcurrency";
 
             {
                 var ctx = new MongoContext(connectionString);
 
                 // set data            
-                //ctx.FindAll<A>().ToList().Foreach(w => repo.Delete(w)); // TODO
+                ctx.FindAll<A>().ToList().Foreach(w => w.Delete());
                 var iz = new I() { iprop1 = "z1", iprop2 = "z2" };
                 var iy = new I() { iprop1 = "y1", iprop2 = "y2" }; //, Set = new List<I>() { iz } };
                 var a = ctx.New<A>();
@@ -121,10 +122,11 @@ namespace SearchAThing.UnitTests
 
             {
                 // reload
-                var repo = new Repository<A>(connectionString);
+                var ctx = new MongoContext(connectionString);
+                var repo = ctx.GetRepository<A>();
 
                 // retrieve two istance of the same document
-                var doc = repo.First();
+                var doc = repo.Collection.AsQueryable().First();
 
                 Assert.True(doc.prop1 == "_x1_"); // [1]
                 Assert.True(doc.prop2 == "_x2_"); // [2]
