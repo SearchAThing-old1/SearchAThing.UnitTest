@@ -69,7 +69,7 @@ namespace SearchAThing.UnitTests
     }
 
     public class Database
-    {
+    {        
 
         [Fact(DisplayName = "MongoConcurrency")]
         public void MongoConcurrency()
@@ -77,25 +77,38 @@ namespace SearchAThing.UnitTests
             const string connectionString = @"mongodb://localhost/searchathing_unittest_mongoconcurrency";
 
             {
-                var ctx = new MongoContext(connectionString);
+                // populate sample
+                {
+                    var ctx = new MongoContext(connectionString);
+                    var repoA = ctx.GetRepository<A>();
 
-                // set data            
-                ctx.FindAll<A>().ToList().Foreach(w => w.Delete());
-                var iz = new I() { iprop1 = "z1", iprop2 = "z2" };
-                var iy = new I() { iprop1 = "y1", iprop2 = "y2" }; //, Set = new List<I>() { iz } };
-                var a = ctx.New<A>();
-                a.prop1 = "x1";
-                a.prop2 = "x2";
-                a.Set = new List<I>() { iy };
-                ctx.Save();
+                    // set data            
+                    repoA.Collection.AsQueryable().Foreach(w => ctx.Delete(w));
+                    ctx.Save();
 
-                // set coll prop
-                iy.Set = new List<I>() { iz };
-                ctx.Save();
+                    var iz = new I() { iprop1 = "z1", iprop2 = "z2" };
+                    var iy = new I() { iprop1 = "y1", iprop2 = "y2" }; //, Set = new List<I>() { iz } };
+                    var a = ctx.New<A>();
+                    a.prop1 = "x1";
+                    a.prop2 = "x2";
+                    a.Set = new List<I>() { iy };
+                    ctx.Save();
+
+                    // set coll prop
+                    iy.Set = new List<I>() { iz };
+                    ctx.Save();
+                }
 
                 // retrieve two istance of the same document
-                var doc1 = ctx.FindAll<A>().First();
-                var doc2 = ctx.FindAll<A>().First();
+                var ctx1 = new MongoContext(connectionString);
+                var repoA1 = ctx1.GetRepository<A>();
+                // Note the .Attach(ctx) extension to bring objects under control of the context
+                var doc1 = repoA1.Collection.AsQueryable().Attach(ctx1).First();              
+
+                var ctx2 = new MongoContext(connectionString);
+                var repoA2 = ctx2.GetRepository<A>();
+                // Note the .Attach(ctx) extension to bring objects under control of the context
+                var doc2 = repoA2.Collection.AsQueryable().Attach(ctx2).First();
 
                 Assert.False(object.ReferenceEquals(doc1, doc2));
 
@@ -117,7 +130,9 @@ namespace SearchAThing.UnitTests
                     doc2.prop2 = "_x2_"; // [2]
                 }
 
-                ctx.Save();
+                // save changes
+                ctx1.Save();
+                ctx2.Save();
             }
 
             {
