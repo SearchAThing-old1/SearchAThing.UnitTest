@@ -43,8 +43,8 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "Vector3D")]
         public void Vector3DTest()
         {
-            var tolLen = model.MUDomain.Length.Value;
-            var tolRad = model.MUDomain.PlaneAngle.Value;
+            var tolLen = model.MUDomain.Length.DefaultTolerance;
+            var tolRad = model.MUDomain.PlaneAngle.DefaultTolerance;
 
             // length
             Assert.True(new Vector3D(1, 5.9, 4).Length.EqualsTol(tolLen, 7.198));
@@ -53,7 +53,7 @@ namespace SearchAThing.UnitTests
             Assert.True(new Vector3D(1, 5.9, 4).Normalized().EqualsTol(Constants.NormalizedLengthTolerance, new Vector3D(0.13893, 0.81968, 0.55572)));
 
             // distance
-            Assert.True(new Vector3D(1, 5.9, 4).Distance(new Vector3D(3, 4.3, 1.03)).EqualsTol(tolLen, 3.922));
+            Assert.True(new Vector3D(1, 5.9, 4).Distance(new Vector3D(3, 4.3, 1.03)).EqualsTol(tolLen, 3.9218));
 
             // dot product
             Assert.True(new Vector3D(5, 1, 3).DotProduct(new Vector3D(5, 4, 6)).EqualsTol(tolLen, 47));
@@ -87,7 +87,7 @@ namespace SearchAThing.UnitTests
 
             // z-axis rotation
             Assert.True(new Vector3D(109.452, 38.712, 0).RotateAboutZAxis((50.0).ToRad())
-                .EqualsTol(tolLen, new Vector3D(40.699, 108.728, 0)));
+                .EqualsTol(tolLen, new Vector3D(40.6992, 108.7286, 0)));
 
             // arbitrary axis rotation
             Assert.True(new Vector3D(747.5675, 259.8335, 0).RotateAboutAxis(new Vector3D(123.151, 353.8977, 25.6), (50.0).ToRad())
@@ -231,7 +231,7 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "Line3D")]
         void Line3DTest()
         {
-            var tolLen = model.MUDomain.Length.Value;
+            var tolLen = model.MUDomain.Length.DefaultTolerance;
 
             // line contains point
             {
@@ -337,13 +337,13 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "Plane3D")]
         void Plane3DTest()
         {
-            var tol = model.MUDomain.Length.Value;
+            var tol = model.MUDomain.Length.DefaultTolerance;
 
             var plane = new Plane3D(new CoordinateSystem3D(Vector3D.Zero, Vector3D.XAxis, Vector3D.YAxis));
 
             var q = new Line3D(new Vector3D(1, -3, -5), new Vector3D(10, 4, 6)).Intersect(tol, plane);
 
-            Assert.True(q.EqualsTol(tol, 5.091, 0.182, 0));
+            Assert.True(q.EqualsTol(tol, 5.0909, 0.1818, 0));
 
             Assert.True(plane.CS.IsParallelTo(tol, new Plane3D(new CoordinateSystem3D(
                 new Vector3D(0, 0, 1), new Vector3D(-1, 0, 0), new Vector3D(0, -1, 0))).CS));
@@ -352,16 +352,16 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "Circle3D")]
         void Circle3DTest()
         {
-            var tol = model.MUDomain.Length.Value;
+            var tol = model.MUDomain.Length.DefaultTolerance;
 
             var circle = new Circle3D(
                 new Vector3D(52.563, 177.463, 0),
                 new Vector3D(180.94, 258.505, 0),
                 new Vector3D(297.124, 112.916, 50));
 
-            Assert.True(circle.Radius.EqualsTol(tol, 129.65));
-            Assert.True(circle.Area.EqualsTol(tol, 52808.74));
-            Assert.True(circle.Center.EqualsTol(tol, 170.91, 132.17, 27.40));
+            Assert.True(circle.Radius.EqualsTol(tol, 129.6516));
+            Assert.True(circle.Area.EqualsTol(tol, 52808.7467));
+            Assert.True(circle.Center.EqualsTol(tol, 170.9181, 132.1797, 27.4052));
             Assert.True(circle.CS.BaseX.EqualsTol(Constants.NormalizedLengthTolerance, -0.9128, 0.3492, -0.2113));
             Assert.True(circle.CS.BaseY.EqualsTol(Constants.NormalizedLengthTolerance, 0.3837, 0.9107, -0.1526));
         }
@@ -370,7 +370,7 @@ namespace SearchAThing.UnitTests
         void PolygonTest()
         {
             {
-                var tolLen = model.MUDomain.Length.Value;
+                var tolLen = model.MUDomain.Length.DefaultTolerance;
 
                 var B = 700; var b = 50;
                 var H = 900; var h = 50;
@@ -421,7 +421,7 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "SortPolygon")]
         void SortPolygonTest()
         {
-            var tol = model.MUDomain.Length.Value;
+            var tol = model.MUDomain.Length.DefaultTolerance;
 
             {
                 var p1 = new Vector3D(-19.331, 168.749, 0);
@@ -462,7 +462,7 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "BBox3D")]
         void BBox3DTest()
         {
-            var tolLen = model.MUDomain.Length.Value;
+            var tolLen = model.MUDomain.Length.DefaultTolerance;
 
             var pts = Vector3D.From3DCoords(
                 1, 5, 8,
@@ -496,14 +496,14 @@ namespace SearchAThing.UnitTests
 
             // Length
             {
-                var tol = mud.Length.Value;
+                var tol = mud.Length.DefaultTolerance;
 
                 var mm = MUCollection.Length.mm;
                 var m = MUCollection.Length.m;
                 var km = MUCollection.Length.km;
 
                 var a = (212356.435 * mm).ConvertTo(mud).Value;
-                var b = (a / 1e3 * m).ConvertTo(mud).Value;
+                var b = (a * 1e3 * mm).ConvertTo(mud).Value;
                 var c = (b / 1e3 * km).ConvertTo(mud).Value;
 
                 Assert.True(a.EqualsTol(tol, b));
@@ -512,7 +512,7 @@ namespace SearchAThing.UnitTests
 
             // Temperature
             {
-                var tol = mud.Temperature.Value;
+                var tol = mud.Temperature.DefaultTolerance;
 
                 var C = MUCollection.Temperature.C;
                 var K = MUCollection.Temperature.K;
