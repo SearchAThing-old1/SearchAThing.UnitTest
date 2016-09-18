@@ -194,6 +194,17 @@ namespace SearchAThing.UnitTests
         #endregion
 
         #region circular list [tests]
+        [Fact(DisplayName = "CircularEnumerator")]
+        public void CircularEnumeratorTest()
+        {
+            var s = new List<int>() { 1, 2, 3 }.AsCircularEnumerable();
+
+            Assert.True(s.Take(7).SequenceEqual(new List<int>() { 1, 2, 3, 1, 2, 3, 1 }));
+            Assert.True(s.Skip(4).Take(4).SequenceEqual(new List<int>() { 2, 3, 1, 2 }));
+        }
+        #endregion
+
+        #region circular list [tests]
         [Fact(DisplayName = "CircularList")]
         public void CircularListTest1()
         {
@@ -264,18 +275,7 @@ namespace SearchAThing.UnitTests
                 Assert.True(cycles == 1);
             }
         }
-        #endregion
-
-        #region circular list [tests]
-        [Fact(DisplayName = "CircularEnumerator")]
-        public void CircularEnumeratorTest()
-        {
-            var s = new List<int>() { 1, 2, 3 }.AsCircularEnumerable();
-
-            Assert.True(s.Take(7).SequenceEqual(new List<int>() { 1, 2, 3, 1, 2, 3, 1 }));
-            Assert.True(s.Skip(4).Take(4).SequenceEqual(new List<int>() { 2, 3, 1, 2 }));
-        }
-        #endregion
+        #endregion        
     }
 
 }
