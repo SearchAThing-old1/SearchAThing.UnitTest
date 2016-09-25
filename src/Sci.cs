@@ -249,6 +249,11 @@ namespace SearchAThing.UnitTests
 
                 Assert.True(l.SegmentContainsPoint(tolLen, 0, tolLen, 0));
                 Assert.False(l.SegmentContainsPoint(tolLen, 0, tolLenExcess, 0));
+
+                var l2 = new Line3D(Vector3D.Zero, new Vector3D(5, 0, 0), Line3DConstructMode.PointAndVector);
+                // point on line
+                Assert.True(l2.SegmentContainsPoint(.5, new Vector3D(-.5, 0, 0)));
+                Assert.False(l2.SegmentContainsPoint(.5, new Vector3D(-.5 - 1e-10, 0, 0)));
             }
 
             // line 3d intersection
