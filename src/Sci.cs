@@ -37,7 +37,7 @@ namespace SearchAThing.UnitTests
 {
 
     public class Sci
-    {        
+    {
         IModel model = new SampleModel();
 
         [Fact(DisplayName = "Vector3D")]
@@ -235,6 +235,8 @@ namespace SearchAThing.UnitTests
 
             // line contains point
             {
+                var tolLenExcess = tolLen + 1e-10;
+
                 // line (0,0,0)-(1,0,0)
                 var l = new Line3D(Vector3D.Zero, new Vector3D(1, 0, 0), Line3DConstructMode.PointAndVector);
                 Assert.True(l.LineContainsPoint(tolLen, 2, 0, 0));
@@ -243,7 +245,10 @@ namespace SearchAThing.UnitTests
 
                 Assert.True(l.SegmentContainsPoint(tolLen, 1, 0, 0));
                 Assert.True(l.SegmentContainsPoint(tolLen, 0, 0, 0));
-                Assert.False(l.SegmentContainsPoint(tolLen, -.1, 0, 0));
+                Assert.False(l.SegmentContainsPoint(tolLen, -tolLenExcess, 0, 0));
+
+                Assert.True(l.SegmentContainsPoint(tolLen, 0, tolLen, 0));
+                Assert.False(l.SegmentContainsPoint(tolLen, 0, tolLenExcess, 0));
             }
 
             // line 3d intersection
@@ -482,14 +487,14 @@ namespace SearchAThing.UnitTests
 
         [Fact(DisplayName = "MeasureUnit")]
         void MeasureUnitTest()
-        {            
+        {
             {
-                 
+
                 var measure = Measure.TryParse("10mm [Length]", null, CultureInfo.InvariantCulture);
-                Assert.True(measure != null && 
+                Assert.True(measure != null &&
                     measure.MU == MUCollection.Length.mm &&
                     measure.MU.PhysicalQuantity == PQCollection.Length &&
-                    Abs(measure.Value-10) < 1e-3);
+                    Abs(measure.Value - 10) < 1e-3);
             }
 
             var mud = new MUDomain();
@@ -501,13 +506,20 @@ namespace SearchAThing.UnitTests
                 var mm = MUCollection.Length.mm;
                 var m = MUCollection.Length.m;
                 var km = MUCollection.Length.km;
+                var inch = MUCollection.Length.inch;
+                var ft = MUCollection.Length.ft;
+                var yard = MUCollection.Length.yard;
+                var links = MUCollection.Length.links;
 
                 var a = (212356.435 * mm).ConvertTo(mud).Value;
-                var b = (a * 1e3 * mm).ConvertTo(mud).Value;
-                var c = (b / 1e3 * km).ConvertTo(mud).Value;
 
-                Assert.True(a.EqualsTol(tol, b));
-                Assert.True(c.EqualsTol(tol, c));
+                Assert.True(a.EqualsTol(tol, (212356.435).Convert(mm, mud)));
+                Assert.True(a.EqualsTol(tol, (212.356435).Convert(m, mud)));
+                Assert.True(a.EqualsTol(tol, (0.212356435).Convert(km, mud)));
+                Assert.True(a.EqualsTol(tol, (8360.489567).Convert(inch, mud)));
+                Assert.True(a.EqualsTol(tol, (696.7074639).Convert(ft, mud)));
+                Assert.True(a.EqualsTol(tol, (232.2358213).Convert(yard, mud)));
+                Assert.True(a.EqualsTol(tol, (1055.6173695617595).Convert(links, mud)));
             }
 
             // Temperature
