@@ -253,10 +253,7 @@ namespace SearchAThing.UnitTests
                 var l2 = new Line3D(Vector3D.Zero, new Vector3D(5, 0, 0), Line3DConstructMode.PointAndVector);
                 // point on line
                 Assert.True(l2.SegmentContainsPoint(.5, new Vector3D(-.5, 0, 0)));
-                Assert.False(l2.SegmentContainsPoint(.5, new Vector3D(-.5 - 1e-10, 0, 0)));
-
-                var l3 = new Line3D(new Vector3D(-996822271745.174, -393771636717.197, 0), new Vector3D(82873.0727539063, 50199.5476074219, 0));
-                Assert.True(l3.SegmentContainsPoint(tolLen, 82872.441131145, 50199.2981162871, 0, autoTol: true));
+                Assert.False(l2.SegmentContainsPoint(.5, new Vector3D(-.5 - 1e-10, 0, 0)));                
             }
 
             // line 3d intersection
@@ -449,15 +446,6 @@ namespace SearchAThing.UnitTests
 
             }
 
-            {
-                var tol = 1e-4;
-
-                var pts = Vector3D.From3DCoords(82873.3582615237, 50199.127027394, 0, 82873.4829795818, 50198.6344687525, 0, -996822271745.174, -393771636717.197, 0, 82873.0727417774, 50199.5476096958, 0);
-                var pt = new Vector3D(82874.8127769043, 50199.2981162871, 0);
-                //var polySegMax = pts.Segments().Select(w => w.Length).Max();
-                //Assert.False(pts.ContainsPoint(polySegMax * 1e-15, pt));
-                Assert.False(pts.ContainsPoint(tol, pt, excludePerimeter: false, autoTolerance: true));
-            }
         }
 
         [Fact(DisplayName = "SortPolygon")]
