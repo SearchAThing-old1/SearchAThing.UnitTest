@@ -254,6 +254,9 @@ namespace SearchAThing.UnitTests
                 // point on line
                 Assert.True(l2.SegmentContainsPoint(.5, new Vector3D(-.5, 0, 0)));
                 Assert.False(l2.SegmentContainsPoint(.5, new Vector3D(-.5 - 1e-10, 0, 0)));
+
+                var l3 = new Line3D(new Vector3D(-996822271745.174, -393771636717.197, 0), new Vector3D(82873.0727539063, 50199.5476074219, 0));
+                Assert.True(l3.SegmentContainsPoint(tolLen, 82872.441131145, 50199.2981162871, 0, autoTol: true));
             }
 
             // line 3d intersection
@@ -425,6 +428,35 @@ namespace SearchAThing.UnitTests
                     67.03, 78.61);
 
                 Assert.True(pts.Area(tol).EqualsTol(5.51624999, 1e-6));
+            }
+
+            {
+                var tol = 1e-4;
+
+                var pts = Vector3D.From3DCoords(82864.6156987284, 50220.4741441392, 0, 82865.1044856623, 50219.6005979311, 0, 82865.7272074748, 50219.9865042438, 0, 82865.6869543679, 50220.5655944049, 0, 82865.14866095, 50220.8044258826, 0);
+                var pt = new Vector3D(82868.5968081355, 50220.4742179776, 0);
+
+                Assert.False(pts.ContainsPoint(tol, pt));
+            }
+
+            {
+                var tol = 1e-4;
+
+                var pts = Vector3D.From3DCoords(82864.4498220986, 50219.2717508153, 0, 82865.1044856623, 50219.6005979311, 0, 82864.6156987284, 50220.4741441392, 0, 82864.0553965054, 50220.1926961096, 0, 82863.9773540763, 50219.6089969349, 0);
+                var pt = new Vector3D(82868.5968081355, 50220.4742179776, 0);
+
+                Assert.False(pts.ContainsPoint(tol, pt));
+
+            }
+
+            {
+                var tol = 1e-4;
+
+                var pts = Vector3D.From3DCoords(82873.3582615237, 50199.127027394, 0, 82873.4829795818, 50198.6344687525, 0, -996822271745.174, -393771636717.197, 0, 82873.0727417774, 50199.5476096958, 0);
+                var pt = new Vector3D(82874.8127769043, 50199.2981162871, 0);
+                //var polySegMax = pts.Segments().Select(w => w.Length).Max();
+                //Assert.False(pts.ContainsPoint(polySegMax * 1e-15, pt));
+                Assert.False(pts.ContainsPoint(tol, pt, excludePerimeter: false, autoTolerance: true));
             }
         }
 
