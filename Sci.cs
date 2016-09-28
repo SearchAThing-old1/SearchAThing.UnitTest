@@ -253,7 +253,7 @@ namespace SearchAThing.UnitTests
                 var l2 = new Line3D(Vector3D.Zero, new Vector3D(5, 0, 0), Line3DConstructMode.PointAndVector);
                 // point on line
                 Assert.True(l2.SegmentContainsPoint(.5, new Vector3D(-.5, 0, 0)));
-                Assert.False(l2.SegmentContainsPoint(.5, new Vector3D(-.5 - 1e-10, 0, 0)));                
+                Assert.False(l2.SegmentContainsPoint(.5, new Vector3D(-.5 - 1e-10, 0, 0)));
             }
 
             // line 3d intersection
@@ -301,6 +301,14 @@ namespace SearchAThing.UnitTests
 
                 Assert.False(new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1))
                     .Colinear(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1.11))));
+            }
+
+            // line contains point
+            {
+                /*
+                var pt = new Vector3D(82864.6156987284, 50220.4741441392);
+                var pt2 = new Vector3D(82868.5968081355, 50220.4742179776);
+                Assert.False(new Line3D(pt, Vector3D.XAxis, Line3DConstructMode.PointAndVector).LineContainsPoint(1e-4, pt2));*/
             }
         }
 
@@ -407,11 +415,9 @@ namespace SearchAThing.UnitTests
 
                 // on right segment
                 Assert.True(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0)));
-                Assert.False(pts.ContainsPoint(tolLen, new Vector3D(b, (H + 2 * h) / 2, 0), excludePerimeter: true));
 
                 // on left segment
                 Assert.True(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0)));
-                Assert.False(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0), excludePerimeter: true));
             }
 
             {
@@ -443,7 +449,24 @@ namespace SearchAThing.UnitTests
                 var pt = new Vector3D(82868.5968081355, 50220.4742179776, 0);
 
                 Assert.False(pts.ContainsPoint(tol, pt));
+            }
 
+            {
+                var tol = 1e-4;
+
+                var pts = Vector3D.From3DCoords(82865.1486609555, 50220.8044259296, 0, 82865.1367431909, 50221.4029804696, 0, 82864.5665724475, 50221.62015258, 0, 82864.126911018, 50221.3476917443, 0, 82864.6156997685, 50220.4741466723, 0);
+                var pt = new Vector3D(82868.5968081355, 50220.474217977557, 0);
+
+                Assert.False(pts.ContainsPoint(tol, pt));
+            }
+
+            {
+                var tol = 1e-4;
+
+                var pts = Vector3D.From3DCoords(82806.2853751313, 50287.8496284662, 0, 82806.9567465798, 50287.1038154201, 0, 82804.856242037, 50285.5083768389, 0, 82804.856242037, 50285.5083768389, 0, 82804.3249042247, 50286.3605524571, 0, 82804.3249042247, 50286.3605524571, 0, 82806.2853751312, 50287.8496284662, 0);
+                var pt = new Vector3D(82821.621856159938, 50304.487467415951);
+
+                Assert.False(pts.ContainsPoint(tol, pt));
             }
 
         }
