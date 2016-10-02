@@ -372,16 +372,53 @@ namespace SearchAThing.UnitTests
         {
             var tol = model.MUDomain.Length.DefaultTolerance;
 
-            var circle = new Circle3D(
-                new Vector3D(52.563, 177.463, 0),
-                new Vector3D(180.94, 258.505, 0),
-                new Vector3D(297.124, 112.916, 50));
+            {
+                var circle = new Circle3D(
+                    new Vector3D(52.563, 177.463, 0),
+                    new Vector3D(180.94, 258.505, 0),
+                    new Vector3D(297.124, 112.916, 50));
 
-            Assert.True(circle.Radius.EqualsTol(tol, 129.6516));
-            Assert.True(circle.Area.EqualsTol(tol, 52808.7467));
-            Assert.True(circle.Center.EqualsTol(tol, 170.9181, 132.1797, 27.4052));
-            Assert.True(circle.CS.BaseX.EqualsTol(Constants.NormalizedLengthTolerance, -0.9128, 0.3492, -0.2113));
-            Assert.True(circle.CS.BaseY.EqualsTol(Constants.NormalizedLengthTolerance, 0.3837, 0.9107, -0.1526));
+                Assert.True(circle.Radius.EqualsTol(tol, 129.6516));
+                Assert.True(circle.Area.EqualsTol(tol, 52808.7467));
+                Assert.True(circle.Center.EqualsTol(tol, 170.9181, 132.1797, 27.4052));
+                Assert.True(circle.CS.BaseX.EqualsTol(Constants.NormalizedLengthTolerance, -0.9128, 0.3492, -0.2113));
+                Assert.True(circle.CS.BaseY.EqualsTol(Constants.NormalizedLengthTolerance, 0.3837, 0.9107, -0.1526));
+            }
+
+            {
+                tol = 2e-4;
+
+                var center = new Vector3D(22.51209044, 14.12016062, 6.80146259);
+                var N = new Vector3D(3.42020143, 2.43210347, -9.07673371);
+                var c = new Circle3D(new CoordinateSystem3D(center, N), 6.39114677);
+
+                var ltangent = new Line3D(
+                    new Vector3D(12.87708949, 20.20572433, 4.80152252),
+                    new Vector3D(30.90622113, 20.43217568, 11.65575191));
+                var lcoplanar = new Line3D(
+                    new Vector3D(13.64224068, 16.47774921, 4.09093100),
+                    new Vector3D(30.67186845, 16.07799217, 10.40074559));
+                var l1point = new Line3D(
+                    new Vector3D(3.39057372, 13.97172849, -2.64691872),
+                    new Vector3D(29.98782817, 12.34242299, 11.34548562));
+                var lout = new Line3D(
+                    new Vector3D(12.61618025, 9.11647552, 5.03700782),
+                    new Vector3D(29.98782817, 8.95992883, 10.43914904));
+
+                var ips = c.Intersect(tol, ltangent).ToList();
+                Assert.True(ips.Count == 1 && ips[0].EqualsTol(tol, 21.89165531, 20.31895000, 8.22863722));
+
+                ips = c.Intersect(tol, lcoplanar).ToList();
+                Assert.True(ips.Count == 2 &&
+                    ips.Any(w => w.EqualsTol(tol, 16.75040000, 16.40478763, 5.24256563)) &&
+                    ips.Any(w => w.EqualsTol(tol, 27.98738426, 16.14100832, 9.40609100)));
+
+                ips = c.Intersect(tol, l1point).ToList();
+                Assert.True(ips.Count == 1 && ips[0].EqualsTol(tol, 16.68920095, 13.15707574, 4.34928345));
+
+                ips = c.Intersect(tol, lout).ToList();
+                Assert.True(ips.Count == 0);
+            }
         }
 
         [Fact(DisplayName = "Polygon")]
