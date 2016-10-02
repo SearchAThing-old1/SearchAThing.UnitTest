@@ -466,7 +466,7 @@ namespace SearchAThing.UnitTests
                 var pts = Vector3D.From3DCoords(82806.2853751313, 50287.8496284662, 0, 82806.9567465798, 50287.1038154201, 0, 82804.856242037, 50285.5083768389, 0, 82804.856242037, 50285.5083768389, 0, 82804.3249042247, 50286.3605524571, 0, 82804.3249042247, 50286.3605524571, 0, 82806.2853751312, 50287.8496284662, 0);
                 var pt = new Vector3D(82821.621856159938, 50304.487467415951);
 
-                Assert.False(pts.ContainsPoint(tol, pt));
+                Assert.False(pts.ContainsPoint(tol, pt, zapDuplicates: true));
             }
 
         }
