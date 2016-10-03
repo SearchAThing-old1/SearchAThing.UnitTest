@@ -419,6 +419,20 @@ namespace SearchAThing.UnitTests
                 ips = c.Intersect(tol, lout).ToList();
                 Assert.True(ips.Count == 0);
             }
+
+            {
+                tol = 1e-3;
+                var p = new Vector3D(3.29679008, 9.48216033, 0);
+                var t = new Line3D(new Vector3D(18.14266304, 4.72460258, 0), new Vector3D(1.29059103, 1.80128397, 0));
+                var r = 9.8191;
+
+                var circles = Circle3D.CircleRTanP(tol, p, t, r);
+
+                Assert.True(circles.Count() == 2);
+                Assert.True(circles.All(w => w.Radius.EqualsTol(tol, 9.81913052)));
+                Assert.True(circles.Any(w => w.Center.EqualsTol(tol, 12.18378030, 13.65597387)));
+                Assert.True(circles.Any(w => w.Center.EqualsTol(tol, -6.47673267, 10.41894611)));                
+            }
         }
 
         [Fact(DisplayName = "Polygon")]
