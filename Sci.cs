@@ -302,13 +302,21 @@ namespace SearchAThing.UnitTests
                 Assert.False(new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1))
                     .Colinear(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1.11))));
             }
-
-            // line contains point
+           
+            // merge segments
             {
-                /*
-                var pt = new Vector3D(82864.6156987284, 50220.4741441392);
-                var pt2 = new Vector3D(82868.5968081355, 50220.4742179776);
-                Assert.False(new Line3D(pt, Vector3D.XAxis, Line3DConstructMode.PointAndVector).LineContainsPoint(1e-4, pt2));*/
+                var sega = new Line3D(new Vector3D(0, 0, 0), new Vector3D(2, 0, 0));
+                var segb = new Line3D(new Vector3D(1, 0, 0), new Vector3D(3, 0, 0));
+                var segc = new Line3D(new Vector3D(3, 0, 0), new Vector3D(1, 0, 0));
+
+                {
+                    var merge = new List<Line3D>() { sega, segb }.MergeColinearSegments(tolLen).ToList();
+                    Assert.True(merge.Count == 1 && merge.First().EqualsTol(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(3, 0, 0))));
+                }
+                {
+                    var merge = new List<Line3D>() { sega, segc }.MergeColinearSegments(tolLen).ToList();
+                    Assert.True(merge.Count == 1 && merge.First().EqualsTol(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(3, 0, 0))));
+                }
             }
         }
 
@@ -431,7 +439,7 @@ namespace SearchAThing.UnitTests
                 Assert.True(circles.Count() == 2);
                 Assert.True(circles.All(w => w.Radius.EqualsTol(tol, 9.81913052)));
                 Assert.True(circles.Any(w => w.Center.EqualsTol(tol, 12.18378030, 13.65597387)));
-                Assert.True(circles.Any(w => w.Center.EqualsTol(tol, -6.47673267, 10.41894611)));                
+                Assert.True(circles.Any(w => w.Center.EqualsTol(tol, -6.47673267, 10.41894611)));
             }
         }
 
