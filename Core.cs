@@ -292,7 +292,12 @@ namespace SearchAThing.UnitTests
         [Fact(DisplayName = "Number")]
         public void NumberTest()
         {
-
+            Assert.True((9.0).IsInRange(1e-2, "[9,10]"));
+            Assert.True((9.0).IsInRange(1e-2, "[0,9.1)"));
+            Assert.False((9.0).IsInRange(1e-2, "[0,9)"));
+            Assert.True((1e10).IsInRange(1e-2, "[0,)"));
+            Assert.False((9.0).IsInRange(1e-2, "(9,12)"));
+            Assert.False((9.0).IsInRange(1e-2, "[10,12)"));
         }
         #endregion
 
