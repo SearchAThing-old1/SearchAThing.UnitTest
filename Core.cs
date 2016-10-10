@@ -286,7 +286,16 @@ namespace SearchAThing.UnitTests
                 Assert.True(cycles == 1);
             }
         }
-        #endregion        
+        #endregion
+
+        #region number [tests]
+        [Fact(DisplayName = "Number")]
+        public void NumberTest()
+        {
+
+        }
+        #endregion
+
     }
 
 }
