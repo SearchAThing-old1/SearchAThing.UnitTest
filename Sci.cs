@@ -85,6 +85,11 @@ namespace SearchAThing.UnitTests
             Assert.True(new Vector3D(120.317, 42.914, 0).AngleToward(tolLen, new Vector3D(28.549, 63.771, 0), -Vector3D.ZAxis)
                 .EqualsTol(2 * PI - 0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
 
+            Assert.True(Abs(
+                new Vector3D(-6.95, -5.1725, 0).AngleToward(1e-6, new Vector3D(6.95, 5.1725, 0), new Vector3D(0, 0, 71.89775))
+                - PI)
+                < model.MUDomain.PlaneAngle.DefaultTolerance);
+
             // z-axis rotation
             Assert.True(new Vector3D(109.452, 38.712, 0).RotateAboutZAxis((50.0).ToRad())
                 .EqualsTol(tolLen, new Vector3D(40.6992, 108.7286, 0)));
@@ -302,7 +307,7 @@ namespace SearchAThing.UnitTests
                 Assert.False(new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1))
                     .Colinear(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1.11))));
             }
-           
+
             // merge segments
             {
                 var sega = new Line3D(new Vector3D(0, 0, 0), new Vector3D(2, 0, 0));
@@ -568,6 +573,23 @@ namespace SearchAThing.UnitTests
                     300, 700,
                     100, 700,
                     100, 500)));
+            }
+
+            {
+                var pts = Vector3D.From2DCoords(
+                    -1, -3.96,
+                    12.9, -3.96,
+                    -1, 6.3850000000000007,
+                    12.9, 6.3850000000000007
+                    );
+
+                var pts2 = pts.SortPoly(1e-6).ToList();
+
+                Assert.True(pts2.EqualsTol(tol, Vector3D.From2DCoords(
+                    12.9, -3.96,
+                    12.9, 6.385,
+                    -1, 6.385,
+                    -1, -3.96)));
             }
         }
 
