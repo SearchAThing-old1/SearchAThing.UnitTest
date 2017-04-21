@@ -69,8 +69,9 @@ namespace SearchAThing.UnitTests
     }
 
     public class Database
-    {        
+    {
 
+        [Trait("Category", "Database")]
         [Fact(DisplayName = "MongoConcurrency")]
         public void MongoConcurrency()
         {
@@ -103,7 +104,7 @@ namespace SearchAThing.UnitTests
                 var ctx1 = new MongoContext(connectionString);
                 var repoA1 = ctx1.GetRepository<A>();
                 // Note the .Attach(ctx) extension to bring objects under control of the context
-                var doc1 = repoA1.Collection.AsQueryable().Attach(ctx1).First();              
+                var doc1 = repoA1.Collection.AsQueryable().Attach(ctx1).First();
 
                 var ctx2 = new MongoContext(connectionString);
                 var repoA2 = ctx2.GetRepository<A>();
