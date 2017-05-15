@@ -77,13 +77,13 @@ namespace SearchAThing.UnitTests
 
             // angle toward
             Assert.True(new Vector3D(120.317, 42.914, 0).AngleToward(tolLen, new Vector3D(28.549, 63.771, 0), Vector3D.ZAxis)
-                .EqualsTol(0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
+                .EqualsTol(MUCollection.PlaneAngle.rad.Tolerance(model), 0.80726));
 
             Assert.False(new Vector3D(120.317, 42.914, 0).AngleToward(tolLen, new Vector3D(28.549, 63.771, 0), -Vector3D.ZAxis)
-                .EqualsTol(0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
+                .EqualsTol(MUCollection.PlaneAngle.rad.Tolerance(model), 0.80726));
 
             Assert.True(new Vector3D(120.317, 42.914, 0).AngleToward(tolLen, new Vector3D(28.549, 63.771, 0), -Vector3D.ZAxis)
-                .EqualsTol(2 * PI - 0.80726, MUCollection.PlaneAngle.rad.Tolerance(model)));
+                .EqualsTol(MUCollection.PlaneAngle.rad.Tolerance(model), 2 * PI - 0.80726));
 
             Assert.True(Abs(
                 new Vector3D(-6.95, -5.1725, 0).AngleToward(1e-6, new Vector3D(6.95, 5.1725, 0), new Vector3D(0, 0, 71.89775))
