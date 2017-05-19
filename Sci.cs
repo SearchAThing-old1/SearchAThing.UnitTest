@@ -231,6 +231,14 @@ namespace SearchAThing.UnitTests
                 Assert.True(lst.Contains(new Vector3D(.0049, .45, 30), cmp));
                 Assert.False(lst.Contains(new Vector3D(.0051, .45, 30), cmp));
             }
+
+            {
+                var v1 = new Vector3D(10, 0, 0);
+                var v2 = new Vector3D(9.9999999999999716, 0, 0);
+                var vcmp = new Vector3DEqualityComparer(1e-4);
+                Assert.True(vcmp.GetHashCode(v1) == vcmp.GetHashCode(v2));
+                Assert.True(vcmp.Equals(v1, v2));
+            }
         }
 
         [Fact(DisplayName = "Line3D")]
@@ -684,6 +692,37 @@ namespace SearchAThing.UnitTests
                     Assert.True(T.ConvertTo(K).Value.EqualsTol(1e-1, K_));
                 }
 
+            }
+
+        }
+
+        [Fact(DisplayName = "Line3DAutoIntersect")]
+        void Line3DAutoIntersect()
+        {
+            var dxf = netDxf.DxfDocument.Load(
+                System.IO.Path.Combine(
+                    System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data"),
+                    "test_autointersect.dxf"));
+
+            var input_segs = dxf.Lines
+                .Where(r => r.Layer.Name == "lay_input")
+                .Select(w => w.ToLine3D()).ToList();
+
+            var processed_segs = input_segs.AutoIntersect(1e-4);
+
+            var expected_segs = dxf.Lines
+                .Where(r => r.Layer.Name == "lay_ok")
+                .Select(w => w.ToLine3D()).ToList();
+
+            var tolLen = 1e-4;
+
+            var q1 = processed_segs.OrderBy(w => w.MidPoint.ToString(tolLen)).ToList();
+            var q2 = expected_segs.OrderBy(w => w.MidPoint.ToString(tolLen)).ToList();
+
+            Assert.True(q1.Count == q2.Count);
+            for (int i = 0; i < q1.Count; ++i)
+            {
+                Assert.True(q1[i].EqualsTol(tolLen, q2[i]));
             }
 
         }
