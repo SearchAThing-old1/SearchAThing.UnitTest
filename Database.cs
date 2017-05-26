@@ -71,6 +71,8 @@ namespace SearchAThing.UnitTests
     public class Database
     {
 
+#if UNIT_TEST_DATABASE
+
         [Trait("Category", "Database")]
         [Fact(DisplayName = "MongoConcurrency")]
         public void MongoConcurrency()
@@ -152,6 +154,8 @@ namespace SearchAThing.UnitTests
             }
 
         }
+
+#endif
 
     }
 

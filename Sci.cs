@@ -314,6 +314,21 @@ namespace SearchAThing.UnitTests
 
                 Assert.False(new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1))
                     .Colinear(tolLen, new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1.11))));
+
+                {
+                    var v1 = Vector3D.From2DCoords(22.646652351539, 13.9522716251755, 23.5544912108728, 15.1454145967669);
+                    var v2 = Vector3D.From2DCoords(32.1714356467077, 26.4617928826826, 23.5548859449172, 15.1451142433282);
+                    var s1 = new Line3D(v1[0], v1[1]);
+                    var s2 = new Line3D(v2[0], v2[1]);
+                    Assert.True(s1.Colinear(1e-3, s2) == s2.Colinear(1e-3, s1));
+                }
+
+                {
+                    var s1 = new Line3D(-90, 29.4932764928483, -90, 40);
+                    var s2 = new Line3D(-90, -2.84E-14, -90, 80);
+                    var segs = new[] { s1, s2 };
+                    Assert.True(segs.MergeColinearSegments(1e-3).Count() == 1);
+                }
             }
 
             // merge segments
@@ -332,7 +347,6 @@ namespace SearchAThing.UnitTests
                 }
             }
         }
-
 
         [Fact(DisplayName = "Matrix3D")]
         void Matrix3DTest()
@@ -466,12 +480,12 @@ namespace SearchAThing.UnitTests
                 var H = 900; var h = 50;
 
                 var pts = new List<Vector3D>()
-            {
-                new Vector3D(0, 0, 0), new Vector3D(B, 0, 0),
-                new Vector3D(B, h, 0),new Vector3D(b, h, 0),
-                new Vector3D(b, H+h, 0), new Vector3D(B, H+h, 0),
-                new Vector3D(B, H +2*h, 0), new Vector3D(0, H+2*h, 0)
-            };
+                {
+                    new Vector3D(0, 0, 0), new Vector3D(B, 0, 0),
+                    new Vector3D(B, h, 0),new Vector3D(b, h, 0),
+                    new Vector3D(b, H+h, 0), new Vector3D(B, H+h, 0),
+                    new Vector3D(B, H +2*h, 0), new Vector3D(0, H+2*h, 0)
+                };
 
                 // area
                 var area = pts.Area(tolLen);
@@ -490,6 +504,48 @@ namespace SearchAThing.UnitTests
 
                 // on left segment
                 Assert.True(pts.ContainsPoint(tolLen, new Vector3D(0, (H + 2 * h) / 2, 0)));
+            }
+
+            {
+                var tol = 1e-3;
+
+                {
+                    var pts = Vector3D.From2DCoords(
+                        0, 0,
+                        10, 0,
+                        10, 10,
+                        0, 10
+                        );
+                    Assert.True(pts.Centroid(tol).EqualsTol(tol, 5, 5, 0));
+
+                    pts = pts.Select(w => w - new Vector3D(10, 10)).ToList();
+                    Assert.True(pts.Centroid(tol).EqualsTol(tol, -5, -5, 0));
+                }
+
+                {
+                    var pts = Vector3D.From2DCoords(
+                        0, 2,
+                        33, 2,
+                        33, 35,
+                        0, 35
+                        );
+                    var A = pts.Area(tol);
+                    Assert.True(A.EqualsTol(1e-1, 1089));
+                    Assert.True(pts.Centroid(tol).EqualsTol(tol, 16.5, 18.5, 0));
+                }
+
+                {
+                    var pts = Vector3D.From2DCoords(
+                        0, 2,
+                        0, 35,
+                        33, 35,
+                        33, 2
+                        );
+                    var A = pts.Area(tol);
+                    Assert.True(A.EqualsTol(1e-1, 1089));
+                    Assert.True(pts.SortPoly(tol, Vector3D.ZAxis).ToList().Centroid(tol).EqualsTol(tol, 16.5, 18.5, 0));
+                }
+
             }
 
             {
@@ -543,6 +599,20 @@ namespace SearchAThing.UnitTests
 
         }
 
+        [Fact(DisplayName = "ClosedPolys2D")]
+        void ClosedPolys2D()
+        {
+            var dxf = netDxf.DxfDocument.Load(
+                System.IO.Path.Combine(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data"), "test_closed_polys1.dxf"));
+
+            var segs = dxf.Lines.Select(w => w.ToLine3D()).ToList();
+            segs = segs.AutoIntersect(1e-3).ToList();
+
+            var polys = segs.ClosedPolys2D(1e-3).ToList();
+            Assert.True(polys.Count == 9);
+            Assert.True(polys.All(r => r.ToList().Area(1e-3).EqualsTol(1e-3, 1111.1111)));
+        }
+
         [Fact(DisplayName = "SortPolygon")]
         void SortPolygonTest()
         {
@@ -580,6 +650,13 @@ namespace SearchAThing.UnitTests
                     300, 500,
                     300, 700,
                     100, 700,
+                    100, 500)));
+
+                pts2 = pts.SortPoly(tol, -Vector3D.ZAxis).ToList();
+                Assert.True(pts2.EqualsTol(tol, Vector3D.From2DCoords(
+                    100, 700,
+                    300, 700,
+                    300, 500,
                     100, 500)));
             }
 
@@ -725,6 +802,12 @@ namespace SearchAThing.UnitTests
                 Assert.True(q1[i].EqualsTol(tolLen, q2[i]));
             }
 
+        }
+
+        [Fact(DisplayName = "NumberTest")]
+        void NumberTest()
+        {
+            Assert.True((3.1415926535897931).NormalizeAngle2PI() == (3.1415926535897931));
         }
 
         /*

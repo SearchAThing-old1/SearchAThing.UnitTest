@@ -297,7 +297,7 @@ namespace SearchAThing.UnitTests
             Assert.False((9.0).IsInRange(1e-2, "[0,9)"));
             Assert.True((1e10).IsInRange(1e-2, "[0,)"));
             Assert.False((9.0).IsInRange(1e-2, "(9,12)"));
-            Assert.False((9.0).IsInRange(1e-2, "[10,12)"));
+            Assert.False((9.0).IsInRange(1e-2, "[10,12)"));            
         }
         #endregion
 
