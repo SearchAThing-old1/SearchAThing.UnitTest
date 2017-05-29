@@ -33,8 +33,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Xunit;
+#if UNIT_TEST_DATABASE
 using MongoDB.Driver.Linq;
 using MongoDB.Driver;
+#endif
 
 namespace SearchAThing.UnitTests
 {
