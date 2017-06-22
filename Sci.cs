@@ -67,6 +67,10 @@ namespace SearchAThing.UnitTests
             // angle rad
             Assert.True(new Vector3D(3.48412, 2.06577, 0).AngleRad(tolLen, new Vector3D(-3.48412, -2.066, 0)).EqualsTol(tolRad, PI));
 
+            // angle contained
+            Assert.True(340d.ToRad().AngleInRange(tolRad, 330d.ToRad(), 3d.ToRad()));
+            Assert.True(0d.ToRad().AngleInRange(tolRad, 330d.ToRad(), 3d.ToRad()));
+
             // vector projection
             Assert.True(new Vector3D(101.546, 25.186, 1.3).Project(new Vector3D(48.362, 46.564, 5))
                 .EqualsTol(tolLen, new Vector3D(64.9889, 62.5728, 6.719)));
