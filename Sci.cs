@@ -63,6 +63,9 @@ namespace SearchAThing.UnitTests
 
             // angle rad
             Assert.True(new Vector3D(3.48412, 2.06577, 0).AngleRad(tolLen, new Vector3D(1.4325, 2.70248, 0)).EqualsTol(tolRad, 0.548));
+            Assert.True(new Vector3D(.231334209442139, .143270492553711)
+                .AngleRad(Constants.NormalizedLengthTolerance, new Vector3D(-.224979639053345, -.153055667877197))
+                .EqualsTol(tolRad, (177.54306).ToRad()));
 
             // angle rad
             Assert.True(new Vector3D(3.48412, 2.06577, 0).AngleRad(tolLen, new Vector3D(-3.48412, -2.066, 0)).EqualsTol(tolRad, PI));
