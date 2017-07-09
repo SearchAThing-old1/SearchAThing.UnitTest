@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SearchAThing.UnitTest</RootNamespace>
     <AssemblyName>SearchAThing.UnitTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -52,22 +52,6 @@
     <Compile Include="Sci.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\clipper\C#\clipper_library\clipper_library.csproj">
-      <Project>{9b062971-a88e-4a3d-b3c9-12b78d15fa66}</Project>
-      <Name>clipper_library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MIConvexHull\MIConvexHull\MIConvexHull.csproj">
-      <Project>{2337776d-7d0c-40aa-a439-c26c3ce24fab}</Project>
-      <Name>MIConvexHull</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\netdxf_mono\netDxf\netDxf.csproj">
-      <Project>{785380e0-ceb9-4c34-82e5-60d0e33e848e}</Project>
-      <Name>netDxf</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SearchAThing.Core\src\SearchAThing.Core.csproj">
-      <Project>{8162a30e-a46d-4a78-ba12-1f376ac6f1b4}</Project>
-      <Name>SearchAThing.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SearchAThing.Graph\src\SearchAThing.Graph.csproj">
       <Project>{d818c09a-9e98-46b4-98c7-81836b7f9585}</Project>
       <Name>SearchAThing.Graph</Name>
@@ -79,10 +63,6 @@
     <ProjectReference Include="..\SearchAThing.Net\src\SearchAThing.Net.csproj">
       <Project>{81cf49db-bd2e-4c72-8016-9268234a2c88}</Project>
       <Name>SearchAThing.Net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SearchAThing.Sci\src\SearchAThing.Sci.csproj">
-      <Project>{f9d7f0ee-d4ff-4455-87be-08539d2d1982}</Project>
-      <Name>SearchAThing.Sci</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +77,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="SearchAThing.Sci">
+      <Version>1.0.0-CI00053</Version>
+    </PackageReference>
     <PackageReference Include="xunit">
       <Version>2.2.0</Version>
     </PackageReference>
